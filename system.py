@@ -309,7 +309,7 @@ if __name__ == '__main__':
 	# eel.start('base1.html', options=my_options)
 	eel.init('web')
 	# eel.start('base.html', size=(1200,800), options=my_options, callback=on_close)
-	eel.start('Achart-visualizationchange.html', size=(1200,900), options=my_options, callback=on_close)
+	eel.start('index.html', size=(1200,900), options=my_options, callback=on_close)
 
 
 	
