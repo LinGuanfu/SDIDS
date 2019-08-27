@@ -1,0 +1,519 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content="Structural health monitoring">
+    <title>结构健康监测系统</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Main CSS-->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <!-- Font-icon css-->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+    <script type='text/javascript' src='/eel.js'></script>
+  </head>
+
+
+  <body class="app sidebar-mini rtl">
+    <!-- Navbar-->
+    <header class="app-header">
+      <a class="app-header__logo" href="#">结构健康监测系统</a>
+      <!-- Sidebar toggle button-->
+      <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>      
+    </header>
+
+  <!-- 可视化部分菜单 Sidebar menu -->
+    <div class="app-sidebar__overlay"  data-toggle="sidebar" > </div>
+    <aside class="app-sidebar">
+        <ul class="app-menu">
+          <li class="treeview">
+            <li class="treeview is-expanded"><a class="app-menu__item" href="index.html" ><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">图表可视化</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+              <ul class="treeview-menu">
+              <li><a class="treeview-item active" href="storey.html"><i class="icon fa fa-cube"></i>葫芦串模型</a></li>
+              <li><a class="treeview-item " href="beam.html"><i class="icon fa fa-cube"></i>悬臂梁模型</a></li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+
+
+
+  <!-- body 中的 main 部分。也就是可视化的图表等 Sidebar menu -->
+    <main class="app-content">
+      <!-- main里面的第一行，表面这一行是什么内容。便于下面进行分析 -->
+      <div class="app-title">
+        <div>
+          <h1><i class="app-menu__icon fa fa-laptop"></i> 图表可视化---葫芦串模型 </h1>
+          <p>清晰、直观、立体的结构健康健康监测数据展示平台</p>
+        </div>
+      </div>
+
+      <!-- %%%%%%%%%%%%%%%%%%%%%%%  以下是main里面的 主体部分， 比如数据的读取 可视化等  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+
+      <div class="container-fluid ">
+        <div class="row">
+          <div class="col-md-2" id="draw-shapes"></div>  <!-- 占位符，左边画图的，这个是形状 -->
+          <div class="col-md-6" id="draw-bar"></div>  <!-- 占位符，左边画图的，这个是形状 -->
+          <div class="col-md-4" >
+            <div class="row border rounded">
+              <div class="col-md-12" style="padding: 0 0 0 0">
+                <strong>
+                  <p class="p-2 bg-success text-center" style="color: white">Input Form</p>			
+                </strong>
+              </div>
+              <div class="col-md-12 form-group">
+                <strong class="text-muted mb-1">
+                  <label for="DOF">Number of freedom</label>	
+                </strong>
+                <input type="number" class="form-control" id="DOF" placeholder="Degree of freedom", value="20">
+              </div>
+              <div class="col-md-12">
+                <strong class="text-muted mb-1">
+                  <label class="control-label">Select Data</label>
+                </strong>
+                <div class="form-group">
+                    <span>
+                      <button type="submit" class="btn btn-primary" value="getdatafile" id="submitbtn">
+                        Select
+                      </button>
+                    </span>
+                    <span class="submitWord">No selected files.</span>
+                </div>
+              </div>	
+              <div class="col-md-12 form-group">
+                <span>
+                <strong class="text-muted mb-1">
+                  <label for="effdof">Effective Dof</label>
+                </strong>
+                     (ie. '1,2,5')
+                </span>
+                <input type="text" class="form-control" id="effdof" placeholder="effdof" value="[8]">	
+              </div>
+              <div class="col-md-12 form-group">
+                <span>
+                <strong class="text-muted mb-1">
+                  <label for="orderuse">Order of Data</label>
+                </strong>
+                     (ie. '1,2,5')
+                </span>
+                <input type="text" class="form-control" id="orderuse" placeholder="orderuse" value="[1,2,3,4,5,6,7]">
+              </div>
+              <div class="col-md-12 form-group">
+                <strong class="text-muted mb-1">
+                  <label for="modeltype">Model Type</label>						
+                </strong>
+                <select class="form-control" id="modeltype">
+                  <option>Storey</option>
+                  <option>Beam</option>
+                  <option>Shell</option>
+                  <option>Truss</option>
+                  <option>Frame</option>
+                </select>		
+              </div> 
+              <div class="col-md-12 form-group">
+                <strong class="text-muted mb-1">
+                  <label for="goaltype">Goal Type</label>
+                </strong>
+                <select class="form-control" id="goaltype">
+                  <option>Decoupled</option>
+                  <option>Coupled</option>
+                </select>		
+              </div>
+              <!-- %%%%%%%  Regularization  参数选择 部分 -->
+              <div class="col-md-12 form-group">
+                <strong class="text-muted mb-2">Regularization</strong>
+                <fieldset>
+                <ul>
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" id="L1reg" name="regularization" class="custom-control-input regularization" value="L1" checked>
+                    <label class="custom-control-label" for="L1reg">L-1 (default)</label>
+                  </div>
+                      <div class="row reg-group" id="L1-reg-group" >
+                    <div class="col-md-6 form-group">
+                      <strong class="text-muted mb-1">
+                        <label for="alpha">&#945;</label>
+                      </strong>
+                      <input type="number" class="form-control" name="L1-alpha" id="L1-alpha" value="3">	
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <strong class="text-muted mb-1">
+                        <label for="lmax">L-max</label>
+                      </strong>
+                      <input type="number" class="form-control" name="L1-lmax" id="L1-lmax" value="10">		
+                    </div>						
+                  </div>
+
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio"  id="L2reg"  name="regularization" class="custom-control-input regularization" value="L2">
+                    <label class="custom-control-label"  for="L2reg">L-2 </label>
+                  </div>
+
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" id="noreg" name="regularization" class="custom-control-input regularization" value="">
+                    <label class="custom-control-label" for="noreg">none </label>
+                  </div>
+                </ul>
+              <fieldset>
+              </div>
+      
+              <div class="col-md-6 p-2">
+                <button class="btn btn-primary btn-block" id="Create">Create</button>
+              </div>
+              <div class="col-md-6 p-2">
+                <button class="btn btn-primary btn-block" id="Calculate">Calculate</button>	
+              </div>
+            </div>
+          </div>	
+        </div>
+      </div>
+
+
+
+        <!-- %%%%%%%%%%%%%%%%%%%%%%%  以上是是主体部分， 比如数据的读取 可视化等  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+
+    </main>
+
+
+
+
+    <!--%%%%%%%%%%%%%%%%%%%%%%%%   main 之后，下面是脚本  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+    <!-- Essential javascripts for application to work-->
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+
+
+    <!-- %%%%%%%%%%%%%%%%%%  画图额外添加的 js   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <script src="js/d3.js"></script>
+    <!-- two.js 核心 js 文件 -->
+    <script src="js/two.min.js"></script>
+    <!-- eel (连接python和web实现数据交换的关键库) js 文件 -->
+    <!-- <script type='text/javascript' src='/eel.js'></script> -->
+
+
+      <script>
+        // 检查类型是radio(type="radio"),属于regularization类(class="regularization")的input标签
+        // 有没有被选中(checked)，没有被选中的话让它父元素的下一个属于reg-group类(class="reg-group")的
+        // div 标签隐藏。
+        $("input.regularization:radio:not(:checked)").parent().next('div.reg-group').hide();
+        // 检查类型是radio(type="radio"),属于regularization类(class="regularization")的input标签
+        // 是不是在变化，如果有变化，则判断变化的这个(this)标签是否被选中(checked)了，如果选中了，则让
+        // 这个标签(this)的父元素的下一个属于reg-group类(class="reg-group")的div标签显示出来，并将其他
+        // 除了这个标签外的，类型是radio(type="radio"),属于regularization类(class="regularization")
+        // 的input标签的父元素的下一个属于reg-group类(class="reg-group")的div标签隐藏。
+        $("input.regularization:radio").change(function () {
+          if ($(this).is(':checked')) {
+            $(this).parent().next('div.reg-group').show();
+            $('input.regularization:radio').not(this).parent().next('div.reg-group').hide();
+          }
+        });
+      
+        // 定义一些作图相关的全局变量。
+        var topp; // 画框顶部与图像的距离(像素)。
+        var dof;  // 画图需要的自由度个数。
+        var len;  // 画剪切层模型每一层长度(像素)。
+      
+        // ======================================================================
+        //                                                                      |
+        //                            创建剪切层模型							    |
+        //                                                                      |
+        // ------------------------------ 功能 ----------------------------------
+        //                                                                      |
+        // 当你输入DOF并按下 Create 按钮时候 ---> 画出相应的楼层	                |
+        //                                                                      |
+        // ------------------------------ 参考 ----------------------------------
+        //                                                                      |
+        // 全程使用 two.js 库 https://two.js.org/，建议细读文档与例子看懂下面的代码 |
+        //                                                                      |
+        // ======================================================================
+        $(document).ready(
+          $("#Create").click(
+            async function(){
+              // 检查 #draw-shapes 这个 div 有没有已经存在 svg 元素 (即已经画有图了)，
+              // 如果有就清空先。
+              if($("#draw-shapes").is(":has(svg)")){
+                $("#draw-shapes").empty()
+              }
+              // 创建 TWO 实例.
+              // (具体参考 two.js 库的文档 https://two.js.org/#documentation 以理解
+              // 下面的内容)
+              var elem = $('#draw-shapes').get(0);
+              var boxwidth = $("#draw-shapes").width()
+              var boxheight = $("#draw-shapes").height();
+              var params = { width: boxwidth, height: boxheight };
+              var two = new Two(params).appendTo(elem);
+      
+              // 创建线的组合.
+              var vergroup = [];
+              var horgroup = [];
+              var buttomgroup = [];
+      
+              dof = await $("#DOF").val();           // 获取自由度的输入。
+              len = Math.round((boxheight-100)/dof); // 每层多长(像素)。
+              var dx = (boxwidth-len)/2; 			   // 距离左端div边界的长度(像素)。
+              var dy = 30;  						   // 距离底端div边界的长度(像素)。
+              var outer = len/2; 					   // 地面超出横向楼板的长度(像素)。
+              var bottomx = 10; 					   // 地面小斜线对边的长度(像素)。
+              topp = boxheight-dof*len-dy;
+      
+              // 创建柱子和楼板。
+              for (var n = 0; n < dof; n++){
+                vergroup.push(two.makeLine(dx, dy+len*n, dx, dy+len*(n+1)));
+                vergroup.push(two.makeLine(dx+len, dy+len*n, dx+len, dy+len*(n+1)));
+                horgroup.push(two.makeLine(dx, dy+len*(n+1), dx+len, dy+len*(n+1)));
+              }
+      
+              // 组合楼板并上色。
+              var verticaLine = two.makeGroup(vergroup);
+              verticaLine.linewidth = 5;
+              verticaLine.stroke = 'rgb(50,200,255)';
+              verticaLine.cap = 'round';
+      
+              // 组合柱子并上色。
+              var horizontalLine = two.makeGroup(horgroup);
+              horizontalLine.linewidth = 5;
+              horizontalLine.stroke = 'rgb(50,200,255)';
+              horizontalLine.cap = 'round';
+      
+              // 画地面。
+              var baseline = two.makeLine(dx-outer, dy, dx+len+outer, dy);
+              baseline.linewidth = 5;
+              for (var ddx = dx-outer; ddx <= dx+len+outer-bottomx; ddx=ddx+bottomx){
+                buttomgroup.push(two.makeLine(ddx, dy-bottomx, ddx+bottomx, dy));
+              }
+              var buttomLine = two.makeGroup(buttomgroup);
+              buttomLine.linewidth = 1;
+      
+              // 组合所有线条。
+              var temp1 = vergroup.concat(horgroup)
+              var temp2 = temp1.concat(buttomgroup)
+              var totalgroup = temp2.concat(baseline)
+              var totalLine = two.makeGroup(totalgroup)
+      
+              // 所有东西旋转180度。
+              totalLine.translation.set(boxwidth , boxheight);
+              totalLine.rotation = Math.PI;
+      
+              // damage index color generator.
+              // var b = d3.rgb(50,200,255);	//蓝色
+              // var a = d3.rgb(255,0,0);	//红色
+              // var color = d3.interpolate(a,b);
+      
+      
+              // var damagecolor = color(0.9)
+              // vergroup[8].stroke = damagecolor
+              // vergroup[9].stroke = damagecolor
+              // horgroup[4].stroke = damagecolor
+      
+              // Don't forget to tell two to render everything
+              // to the screen
+              two.update();
+            }
+          )
+        );
+      
+        // ======================================================================
+        //                                                                      |
+        //                            可视化损伤结果							    |
+        //                                                                      |
+        // ------------------------------ 功能 ----------------------------------
+        //                                                                      |
+        // 当你输入剩下参数并按下 Calculate 按钮时候 ---> 画出损伤图     	        |
+        //                                                                      |
+        // ------------------------------ 参考 ----------------------------------
+        //                                                                      |
+        // 全程使用 D3.js 库：https://d3js.org/									|
+        //					 https://github.com/d3/d3/wiki                      |
+        //					 https://www.d3-graph-gallery.com/                  |
+        //					 https://www.d3-graph-gallery.com/barplot.html      |
+        // 建议细读文档与例子看懂下面的代码                                       	|
+        //                                                                      |
+        // ======================================================================
+        $(document).ready(
+          $("#Calculate").click(
+            async function(){
+              // ===================== Part A =========================
+              //                                                      |
+              //       			这是需要注意的地方                   	|
+              //                                                      |
+              // 以下代码属于获取数据并计算损伤的全过程。 (已注释)        	|
+              // 得依赖python的函数才能计算并得到用于画图用的损伤数据。  	|
+              // 单纯网页没有办法获得数据，所以先采用下一段人为构造的一组	|
+              // 损伤数据（Part B）作为可视化的输入。                    	|
+              //                                                      |
+              // ======================================================				
+              // // 获取所有需要用到的参数。
+              var csvfile = localStorage.getItem("csvfile");  	// 文件路径。
+              var dof = Number($("#DOF").val());					// 自由度。
+              var modeltype = $("#modeltype").val();				// 模型类型。
+              var goaltype = $("#goaltype").val();				// 目标函数类型。
+              var effdof = JSON.parse($("#effdof").val());		// 测点自由度。
+              var orderuse = JSON.parse($("#orderuse").val());	// 用到的频率阶数。
+              // 检查是否采用正则化。
+              if ($("#L1reg").is(':checked')) {
+              	// 获取 L1 正则化需要的超参数。
+              	var alpha = Number($("#L1-alpha").val());
+              	var lmax = Number($("#L1-lmax").val());
+              // 	// 控制台输出参数，以便查看数据类型和数据是否正确。
+              // 	console.log('dof:',typeof dof);
+              // 	console.log(dof);
+              // 	console.log('modeltype:',typeof modeltype);
+              // 	console.log(modeltype);
+              // 	console.log('goaltype:',typeof goaltype);
+              // 	console.log(goaltype);
+              // 	console.log('effdof:',typeof effdof);
+              // 	console.log(effdof);
+              // 	console.log('orderuse:',typeof orderuse);
+              // 	console.log(orderuse);
+              // 	console.log('alpha:',typeof alpha);
+              // 	console.log(alpha);
+              // 	console.log('lmax:',typeof lmax);
+              // 	console.log(lmax);
+              // // 调用后台python的Detect函数进行损伤计算并保存返回的结果于stiff。
+               var stiff = await eel.Detect(modeltype,goaltype,localStorage.
+               	getItem("csvfile"),dof,effdof,orderuse,lmax=lmax,alpha=alpha)();
+              // // 控制台输出结果，检查是否正确。
+              // console.log(stiff)
+              // console.log(typeof stiff)
+      
+              } else { 
+              //     //如果不进行正则化，有待完成...
+              // 	console.log(dof,modeltype,goaltype,effdof,orderuse);
+               }
+      
+              // ===================== Part B =========================
+              //                                                      |
+              //       			这是需要注意的地方                   	|
+              //                                                      |
+              // 以下代码属于人为构造的一组损伤数据作为可视化的输入。     	|
+              //                                                      |
+              // ======================================================				
+              // const sitff = [{'dof':1,'value':1.00},{'dof':2,'value':1.00},
+              //          {'dof':3,'value':1.00},{'dof':4,'value':1.00},
+              //          {'dof':5,'value':0.90},{'dof':6,'value':1.00},
+              //          {'dof':7,'value':1.00},{'dof':8,'value':1.00}];
+      
+              // ===================== Part C =========================
+              //                                                      |
+              //       			    可视化过程                   	|
+              //                                                      |
+              // 以下代码属于人为构造的一组损伤数据作为可视化的输入。     	|
+              //                                                      |
+              // ======================================================	
+              // 为了对齐左侧结构图，定义一些边界长度(margin)。
+              var margin = {top: topp, right: 30, bottom: 30, left: 30, text: 60};
+              var width = $("#draw-bar").width();
+              var height = $("#draw-shapes svg").height()+margin.text;
+      
+              // 创建画布。
+              var svg = await d3.select("#draw-bar")
+                .append("svg")
+                  .attr("width", width)
+                  .attr("height", height)
+                .append("g")
+                  .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
+                  
+              console.log(svg,width,height);
+              // 创建 X 轴。
+              var x = d3.scaleLinear()
+                .domain([0, 1])
+                .range([ 0, width-margin.right-margin.left]);
+              svg.append("g")
+                .attr("id","xaxis")
+                .attr("transform", "translate(0," + dof*len + ")")
+                .call(d3.axisBottom(x))
+                .style("font-size", "16px")
+                .selectAll("text")
+                   .attr("transform", "translate(-10,0)rotate(-45)")
+                   .style("text-anchor", "end");
+      
+      
+              // 创建 Y 轴。
+              console.log(dof)
+              console.log(Array.from(new Array(Number(dof)), (x,i) => i+1).reverse())
+              var y = d3.scaleBand()
+                .range([ 0, height-margin.top-margin.bottom-margin.text ])
+                .domain(Array.from(new Array(Number(dof)), (x,i) => i+1).reverse())
+                .padding(.1);
+      
+              svg.append("g")
+                .attr("id","yaxis")
+                .call(d3.axisLeft(y))
+                .style("font-size", "20px")
+      
+      
+              var barGroups = svg.selectAll("myRect")
+                .data(stiff)
+                .enter()
+                .append('g')
+                .attr("class", "bar")
+      
+              barGroups
+                .append("rect")
+                .attr("x", x(0) )
+                .attr("y", (d) => y(d.dof))
+                .attr("width", (d) => x(0))
+                .attr("height", y.bandwidth() )
+                .attr("fill", "#69b3a2");
+      
+              barGroups
+                .append('text')
+                .attr("id", "bartext")
+                .attr('x', (a) => x(a.value) - 30)
+                .attr('y', (a) => y(a.dof) + y.bandwidth()/2 + 12) 
+                .attr('text-anchor', 'middle')
+                .attr("font-size", '34px')
+                .attr("font-family", 'sans-serif')
+                .text(a => a.value)
+      
+              // 动画。
+              svg.selectAll("rect")
+                .transition()
+                .duration(800)
+                .attr("width", (d) => x(d.value))
+                .delay(function(d,i){ return(i*100)})
+      
+              svg.append('text')
+                .attr('class', 'labeltext')
+                .attr('x', (width-margin.left-margin.right) / 2)
+                .attr('y', height-margin.top-margin.bottom+margin.text/4)
+                .attr('text-anchor', 'middle')
+                .attr("font-size", '28px')
+                .attr("font-family", 'sans-serif')
+                .text('Stiff Ratio')
+      
+      
+              d3.selectAll("#yaxis text").attr("fill", "#888");
+              d3.selectAll(".bar text").attr("fill", "#fff");
+              // d3.selectAll(".label text").attr("font-size", "20px");
+            }
+          )
+        );
+      
+        // 获取文件路径。
+        $(document).ready(
+          $("#submitbtn").click(async function(){
+              var filepath = await eel.getPath()();
+                  var extStart = filepath.lastIndexOf('.');
+              ext = filepath.substring(extStart, filepath.length).toUpperCase();
+              if (ext !== '.CSV') {
+                $('.submitWord').html("上传文件出错！");
+              } else {
+              localStorage.setItem("csvfile",filepath);
+              $('.submitWord').html(filepath);
+              console.log(localStorage.getItem("csvfile"));
+              }
+          })
+        );
+
+      </script>
+
+  </body>
+</html>
+
