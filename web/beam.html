@@ -85,9 +85,9 @@
                 </div>
                 <div class="col-md-12 form-group">
                   <strong class="text-muted mb-1">
-                    <label for="DOF">Number of element</label>
+                    <label for="numelem">Number of element</label>
                   </strong>
-                  <input type="number" class="form-control" id="DOF" placeholder="Degree of freedom" , value="20">
+                  <input type="number" class="form-control" id="numelem" placeholder="Number of element", value="20">
                 </div>
                 <div class="col-md-12">
                   <strong class="text-muted mb-1">
@@ -110,14 +110,30 @@
                   </span>
                   <input type="text" class="form-control" id="MeasuredNodes" placeholder="MeasuredNodes" value="[20]">
                 </div>
-                <div class="col-md-6 form-group">
-                  <span>
-                    <strong class="text-muted mb-1">
-                      <label for="orderuse">Order of Data</label>
-                    </strong>
-                  </span>
-                  <input type="text" class="form-control" id="orderuse" placeholder="orderuse" value="[1,2,3,4,5,6]">
-                </div>
+              <div class="col-md-6 form-group">
+                <span>
+                <strong class="text-muted mb-1">
+                  <label for="orderuse">Order of Data</label>
+                </strong>
+                </span>
+                <input type="text" class="form-control" id="orderuse" placeholder="orderuse" value="[1,2,3,4,5,6]">
+              </div>
+              <div class="col-md-6 form-group">
+                <span>
+                <strong class="text-muted mb-1">
+                  <label for="DirDOF">Fixed DOFs</label>
+                </strong>
+                </span>
+                <input type="text" class="form-control" id="DirDOF" placeholder="DirDOF" value="[1,2]">
+              </div>
+              <div class="col-md-6 form-group">
+                <span>
+                <strong class="text-muted mb-1">
+                  <label for="TolLen">Toltal Length of the Beam</label>
+                </strong>
+                </span>
+                <input type="text" class="form-control" id="TolLen" placeholder="TolLen" value="0.4953">
+              </div>
                 <div class="col-md-6 form-group">
                   <span>
                     <strong class="text-muted mb-1">
@@ -306,7 +322,7 @@
           var horgroup = [];
           var buttomgroup = [];
 
-          dof = await $("#DOF").val();           // 获取自由度的输入。
+          dof = await $("#numelem").val();           // 获取自由度的输入。
           len = Math.round((boxheight - 100) / dof); // 每层多长(像素)。
           var dx = (boxwidth-len) / 2; 			   // 距离左端div边界的长度(像素)。
           var dy = 30;  						   // 距离底端div边界的长度(像素)。
@@ -404,12 +420,15 @@
           // ======================================================				
           // 获取所有需要用到的参数。
           var csvfile = localStorage.getItem("csvfile");  	// 文件路径。
-          var dof = Number($("#DOF").val());					// 自由度。
+          var numelem = Number($("#numelem").val());					// 自由度。
           var modeltype = $("#modeltype").val();				// 模型类型。
           var goaltype = $("#goaltype").val();				// 目标函数类型。
           var MeasuredNodes = JSON.parse($("#MeasuredNodes").val());		// 测点自由度。
-          var E = Number($("#beamE").val());	// 用到的频率阶数。
+          var orderuse = JSON.parse($("#orderuse").val());    // 用到的频率阶数。
+          var DirDOF = JSON.parse($("#DirDOF").val());
+          var TolLen = Number($("#TolLen").val());
           var rho = Number($("#rho").val());
+          var E = Number($("#beamE").val());	
           var area = Number($("#area").val());
           var Im = Number($("#Im").val());
           var csvfile =localStorage.getItem("csvfile")
@@ -419,8 +438,8 @@
           	var alpha = Number($("#L1-alpha").val());
           	var lmax = Number($("#L1-lmax").val());
           	// 控制台输出参数，以便查看数据类型和数据是否正确。
-          	console.log('dof:',typeof dof);
-          	console.log(dof);
+          	console.log('numelem:',typeof numelem);
+          	console.log(numelem);
           	console.log('modeltype:',typeof modeltype);
           	console.log(modeltype);
           	console.log('goaltype:',typeof goaltype);
@@ -436,7 +455,7 @@
           // 调用后台python的Detect函数进行损伤计算并保存返回的结果于stiff。
 
 
-          var stiff = await eel.BeamDetect(modeltype,goaltype,csvfile,dof,MeasuredNodes,orderuse,E,rho,area,Im,lmax=lmax,alpha=alpha)();
+          var stiff = await eel.BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,TolLen,E,rho,area,Im,lmax=lmax,alpha=alpha)();
           // // 控制台输出结果，检查是否正确。
           // console.log(stiff)
           // console.log(typeof stiff)
