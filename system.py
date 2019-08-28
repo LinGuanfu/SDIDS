@@ -163,14 +163,14 @@ def Detect(modeltype,goaltype,csvfile,dof,effdof,orderuse,reg=True,lmax=3,alpha=
 	# dof: integer
 	# effdof: list
 	# orderuse: list
-	print('Here python!')
-	print(type(modeltype),type(goaltype),type(csvfile),type(dof),type(effdof),type(orderuse))
+	# print('Here python!')
+	# print(type(modeltype),type(goaltype),type(csvfile),type(dof),type(effdof),type(orderuse))
 	data_ = pd.read_csv(csvfile, header=None).values
 	kstiff = data_[:,0]
 	kstiff = np.diagflat(kstiff)
 	mass = data_[:,1]
 	modedata = data_[:,2:2+len(effdof)]
-	modedata = modedata[[x-1 for x in orderuse],:].reshape((1,len(orderuse)))
+	modedata = modedata[[x-1 for x in orderuse],:].reshape((len(orderuse), len(effdof))).T
 	eigvaluedata0 = data_[:,2+len(effdof)]
 	eigvaluedata1 = data_[:,2+len(effdof)+1]
 	eigvaluedata0 = 2*math.pi*eigvaluedata0
@@ -181,14 +181,14 @@ def Detect(modeltype,goaltype,csvfile,dof,effdof,orderuse,reg=True,lmax=3,alpha=
 	eigvaluedata = eigvaluedatafem + eigvaluedatafem/eigvaluedata0*(eigvaluedata1-eigvaluedata0)
 	eigvaluedata = eigvaluedata[[x-1 for x in orderuse]]
 	weight = np.diag(1/eigvaluedata)
-	print(dof)
-	print(effdof)
-	print(len(orderuse))
-	print(type(modedata),modedata.shape)
-	print(modedata)
-	print(eigvaluedata)
-	print(type(kstiff),kstiff.shape)
-	print(kstiff)
+	# print(dof)
+	# print(effdof)
+	# print(len(orderuse))
+	# print(type(modedata),modedata.shape)
+	# print(modedata)
+	# print(eigvaluedata)
+	# print(type(kstiff),kstiff.shape)
+	# print(kstiff)
 
 	# Generate model.
 	if modeltype == "Storey":
@@ -227,12 +227,14 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 	# numelem: integer
 	# MeasuredNodes: list
 	# orderuse: list
+	# DirDOF: list
+	# TolLen: float
 	# E: float
 	# rho: float
 	# area: float
 	# Im: float
-	print('Here python!')
-	print(type(modeltype),type(goaltype),type(csvfile),type(numelem),type(MeasuredNodes),type(orderuse))
+	# print('Here python!')
+	# print(type(modeltype),type(goaltype),type(csvfile),type(numelem),type(MeasuredNodes),type(orderuse))
 	data_ = pd.read_csv(csvfile, header=None).values
 	# kstiff = data_[:,0].reshape((dof,1))
 	# mass = data_[:,1]
@@ -259,7 +261,7 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 	numeig = len(orderuse)
 
 	# mode_data = np.ones((1, numelem))
-	mode_data = data_[:,0].reshape((1,numeig))
+	mode_data = data_[:,0].reshape((numeig, len(MeasuredNodes))).T
 	# eigenvalue_data= 2*math.pi*np.array([23.09, 140.90, 407.75, 795.14, 1292.30, 1998.43])
 	eigenvalue_data= data_[:,1].reshape(numeig)
 	eigenvalue_data= eigenvalue_data*2*np.pi
@@ -270,15 +272,16 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 
 	weight = np.eye(numeig)
 	
-	E=7.1e10
-	rho=2.21e3
-	area=0.0254*0.00635
-	Im=1/12*0.0254*0.00635**3
+	# E=7.1e10
+	# rho=2.21e3
+	# area=0.0254*0.00635
+	# Im=1/12*0.0254*0.00635**3
+	# print(E,rho,area,Im)
 	
 	rhoA=rho*area
 	kstiff = E*Im*np.ones(numelem)
 	
-	print(numelem,effdof,numeig,modedata,eigvaluedata,weight,TolLen,DirDOF,rhoA,kstiff)
+	# print(numelem,effdof,numeig,modedata,eigvaluedata,weight,TolLen,DirDOF,rhoA,kstiff)
 
 	# Generate model.
 	if modeltype == "Beam":

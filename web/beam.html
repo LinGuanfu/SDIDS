@@ -156,7 +156,7 @@
                       <label for="Im">Im</label>
                     </strong>
                   </span>
-                  <input type="text" class="form-control" id="Im" placeholder="Im" value="5.42e-10">
+                  <input type="text" class="form-control" id="Im" placeholder="Im" value="5.419680020833333e-10">
                 </div>
                 <div class="col-md-6 form-group">
                   <span>
@@ -164,7 +164,7 @@
                       <label for="area">area</label>
                     </strong>
                   </span>
-                  <input type="text" class="form-control" id="area" placeholder="area" value="1.61e-4">
+                  <input type="text" class="form-control" id="area" placeholder="area" value="1.6129e-4">
                 </div>
                 <div class="col-md-6 form-group">
                   <strong class="text-muted mb-1">
@@ -420,38 +420,37 @@
           // ======================================================				
           // 获取所有需要用到的参数。
           var csvfile = localStorage.getItem("csvfile");  	// 文件路径。
-          var numelem = Number($("#numelem").val());					// 自由度。
+          var numelem = Number($("#numelem").val());					// 单元数。
           var modeltype = $("#modeltype").val();				// 模型类型。
           var goaltype = $("#goaltype").val();				// 目标函数类型。
-          var MeasuredNodes = JSON.parse($("#MeasuredNodes").val());		// 测点自由度。
-          var orderuse = JSON.parse($("#orderuse").val());    // 用到的频率阶数。
-          var DirDOF = JSON.parse($("#DirDOF").val());
-          var TolLen = Number($("#TolLen").val());
-          var rho = Number($("#rho").val());
-          var E = Number($("#beamE").val());	
-          var area = Number($("#area").val());
-          var Im = Number($("#Im").val());
-          var csvfile =localStorage.getItem("csvfile")
+          var MeasuredNodes = JSON.parse($("#MeasuredNodes").val());		// 测点。
+          var orderuse = JSON.parse($("#orderuse").val());  // 用到的频率阶数。
+          var DirDOF = JSON.parse($("#DirDOF").val());      // 固定的自由度。
+          var TolLen = Number($("#TolLen").val());          // 梁的总长度。
+          var rho = Number($("#rho").val());                // 密度。
+          var E = Number($("#beamE").val());	              // 弹性模量。
+          var area = Number($("#area").val());              // 梁横截面积。
+          var Im = Number($("#Im").val());                  // 梁截面惯性矩。
           // 检查是否采用正则化。
           if ($("#L1reg").is(':checked')) {
           	// 获取 L1 正则化需要的超参数。
           	var alpha = Number($("#L1-alpha").val());
           	var lmax = Number($("#L1-lmax").val());
           	// 控制台输出参数，以便查看数据类型和数据是否正确。
-          	console.log('numelem:',typeof numelem);
-          	console.log(numelem);
-          	console.log('modeltype:',typeof modeltype);
-          	console.log(modeltype);
-          	console.log('goaltype:',typeof goaltype);
-          	console.log(goaltype);
-          	console.log('MeasuredNodes:',typeof MeasuredNodes);
-          	console.log(MeasuredNodes);
-          	console.log('orderuse:',typeof orderuse);
-          	console.log(orderuse);
-          	console.log('alpha:',typeof alpha);
-          	console.log(alpha);
-          	console.log('lmax:',typeof lmax);
-          	console.log(lmax);
+          	// console.log('numelem:',typeof numelem);
+          	// console.log(numelem);
+          	// console.log('modeltype:',typeof modeltype);
+          	// console.log(modeltype);
+          	// console.log('goaltype:',typeof goaltype);
+          	// console.log(goaltype);
+          	// console.log('MeasuredNodes:',typeof MeasuredNodes);
+          	// console.log(MeasuredNodes);
+          	// console.log('orderuse:',typeof orderuse);
+          	// console.log(orderuse);
+          	// console.log('alpha:',typeof alpha);
+          	// console.log(alpha);
+          	// console.log('lmax:',typeof lmax);
+          	// console.log(lmax);
           // 调用后台python的Detect函数进行损伤计算并保存返回的结果于stiff。
 
 
