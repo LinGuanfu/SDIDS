@@ -28,9 +28,9 @@
     <aside class="app-sidebar">
         <ul class="app-menu">
           <li class="treeview">
-            <li class="treeview is-expanded"><a class="app-menu__item" href="index.html" ><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">图表可视化</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+            <li class="treeview is-expanded"><a class="app-menu__item" href="index.html" ><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">模型</span><i class="treeview-indicator fa fa-angle-right"></i></a>
               <ul class="treeview-menu">
-              <li><a class="treeview-item active" href="storey.html"><i class="icon fa fa-cube"></i>葫芦串模型</a></li>
+              <li><a class="treeview-item active" href="storey.html"><i class="icon fa fa-cube"></i>剪切层模型</a></li>
               <li><a class="treeview-item " href="beam.html"><i class="icon fa fa-cube"></i>悬臂梁模型</a></li>
             </ul>
           </li>
@@ -44,35 +44,24 @@
       <!-- main里面的第一行，表面这一行是什么内容。便于下面进行分析 -->
       <div class="app-title">
         <div>
-          <h1><i class="app-menu__icon fa fa-laptop"></i> 图表可视化---葫芦串模型 </h1>
-          <p>清晰、直观、立体的结构健康健康监测数据展示平台</p>
+          <h1><i class="app-menu__icon fa fa-laptop"></i> 剪切层模型 </h1>
         </div>
       </div>
 
       <!-- %%%%%%%%%%%%%%%%%%%%%%%  以下是main里面的 主体部分， 比如数据的读取 可视化等  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
-
-
-
       <div class="container-fluid ">
         <div class="row">
-          <div class="col-md-2" id="draw-shapes"></div>  <!-- 占位符，左边画图的，这个是形状 -->
-          <div class="col-md-6" id="draw-bar"></div>  <!-- 占位符，左边画图的，这个是形状 -->
-          <div class="col-md-4" >
-            <div class="row border rounded">
-              <div class="col-md-12" style="padding: 0 0 0 0">
-                <strong>
-                  <p class="p-2 bg-success text-center" style="color: white">Input Form</p>			
-                </strong>
-              </div>
+          <div class="col-md-4">
+            <div class="row">
               <div class="col-md-12 form-group">
                 <strong class="text-muted mb-1">
-                  <label for="DOF">Number of freedom</label>	
+                  <label for="DOF">剪切层层数</label>  
                 </strong>
                 <input type="number" class="form-control" id="DOF" placeholder="Degree of freedom", value="8">
               </div>
               <div class="col-md-12">
                 <strong class="text-muted mb-1">
-                  <label class="control-label">Select Data</label>
+                  <label class="control-label">选择数据</label>
                 </strong>
                 <div class="form-group">
                     <span>
@@ -80,31 +69,29 @@
                         Select
                       </button>
                     </span>
-                    <span class="submitWord">No selected files.</span>
+                    <span class="submitWord">未选择数据。</span>
                 </div>
-              </div>	
+              </div>  
               <div class="col-md-6 form-group">
                 <span>
                 <strong class="text-muted mb-1">
-                  <label for="effdof">Effective Dof</label>
+                  <label for="effdof">测点编号</label>
                 </strong>
-                     (ie. '1,2,5')
                 </span>
-                <input type="text" class="form-control" id="effdof" placeholder="effdof" value="[8]">	
+                <input type="text" class="form-control" id="effdof" placeholder="effdof" value="[8]"> 
               </div>
               <div class="col-md-6 form-group">
                 <span>
                 <strong class="text-muted mb-1">
-                  <label for="orderuse">Order of Data</label>
+                  <label for="orderuse">数据阶数</label>
                 </strong>
-                     (ie. '1,2,5')
                 </span>
                 <input type="text" class="form-control" id="orderuse" placeholder="orderuse" value="[1,2,3,4,5,6,7]">
               </div>
               <div class="col-md-6 form-group">
                 <span>
                 <strong class="text-muted mb-1">
-                  <label for="tol">Tolerance of Convergence Criteria</label>
+                  <label for="tol">收敛因子</label>
                 </strong>
                 </span>
                 <input type="text" class="form-control" id="tol" placeholder="tol" value="1.0e-6"> 
@@ -112,54 +99,51 @@
               <div class="col-md-6 form-group">
                 <span>
                 <strong class="text-muted mb-1">
-                  <label for="nmax">Maximum Number of Iteration</label>
+                  <label for="nmax">最大迭代步数</label>
                 </strong>
                 </span>
                 <input type="text" class="form-control" id="nmax" placeholder="nmax" value="1000"> 
               </div>
               <div class="col-md-6 form-group">
                 <strong class="text-muted mb-1">
-                  <label for="modeltype">Model Type</label>						
+                  <label for="modeltype">模型类型</label>           
                 </strong>
                 <select class="form-control" id="modeltype">
-                  <option>Storey</option>
-                  <option>Beam</option>
-                  <option>Shell</option>
-                  <option>Truss</option>
-                  <option>Frame</option>
-                </select>		
+                  <option>剪切层</option>
+                  <option>悬臂梁</option>
+                </select>   
               </div> 
               <div class="col-md-6 form-group">
                 <strong class="text-muted mb-1">
-                  <label for="goaltype">Goal Type</label>
+                  <label for="goaltype">目标函数类型</label>
                 </strong>
                 <select class="form-control" id="goaltype">
-                  <option>Decoupled</option>
-                  <option>Coupled</option>
-                </select>		
+                  <option>解耦型</option>
+                  <option>耦合型</option>
+                </select>   
               </div>
               <!-- %%%%%%%  Regularization  参数选择 部分 -->
               <div class="col-md-12 form-group">
-                <strong class="text-muted mb-2">Regularization</strong>
+                <strong class="text-muted mb-2">正则化</strong>
                 <fieldset>
                 <ul>
                   <div class="custom-control custom-radio mb-1">
                     <input type="radio" id="L1reg" name="regularization" class="custom-control-input regularization" value="L1" checked>
-                    <label class="custom-control-label" for="L1reg">L-1 (default)</label>
+                    <label class="custom-control-label" for="L1reg">L-1 (默认)</label>
                   </div>
                       <div class="row reg-group" id="L1-reg-group" >
                     <div class="col-md-6 form-group">
                       <strong class="text-muted mb-1">
                         <label for="alpha">&#945;</label>
                       </strong>
-                      <input type="number" class="form-control" name="L1-alpha" id="L1-alpha" value="10">	
+                      <input type="number" class="form-control" name="L1-alpha" id="L1-alpha" value="10"> 
                     </div>
                     <div class="col-md-6 form-group">
                       <strong class="text-muted mb-1">
                         <label for="lmax">L-max</label>
                       </strong>
-                      <input type="number" class="form-control" name="L1-lmax" id="L1-lmax" value="3">		
-                    </div>						
+                      <input type="number" class="form-control" name="L1-lmax" id="L1-lmax" value="3">    
+                    </div>            
                   </div>
 
                   <div class="custom-control custom-radio mb-1">
@@ -169,20 +153,22 @@
 
                   <div class="custom-control custom-radio mb-1">
                     <input type="radio" id="noreg" name="regularization" class="custom-control-input regularization" value="">
-                    <label class="custom-control-label" for="noreg">none </label>
+                    <label class="custom-control-label" for="noreg">不采用正则化 </label>
                   </div>
                 </ul>
               <fieldset>
               </div>
       
               <div class="col-md-6 p-2">
-                <button class="btn btn-primary btn-block" id="Create">Create</button>
+                <button class="btn btn-primary btn-block" id="Create">创建模型</button>
               </div>
               <div class="col-md-6 p-2">
-                <button class="btn btn-primary btn-block" id="Calculate">Calculate</button>	
+                <button class="btn btn-primary btn-block" id="Calculate">计算损伤</button>  
               </div>
             </div>
-          </div>	
+          </div> 
+          <div class="col-md-2" id="draw-shapes"></div>  <!-- 占位符，左边画图的，这个是形状 -->
+          <div class="col-md-6" id="draw-bar"></div>  <!-- 占位符，左边画图的，这个是形状 -->
         </div>
       </div>
 
