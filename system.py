@@ -30,9 +30,6 @@ def Identifier(PSD,Frequencies,ax):
 		s2.append(s[1])
 		s3.append(s[2])
 		ms[:,i] = u[:,0]
-	# ax.plot(Frequencies,20*np.log10(s1))
-	# ax.plot(Frequencies,20*np.log10(s2))
-	# ax.plot(Frequencies,20*np.log10(s3))
 	ax.plot(Frequencies,s1)
 	ax.plot(Frequencies,s2)
 	ax.plot(Frequencies,s3)
@@ -41,7 +38,6 @@ def Identifier(PSD,Frequencies,ax):
 
 @eel.expose
 def FDD(csvfile,fs,nperseg,window):
-	# data = pd.read_csv('Accelerations.csv',header=None)
 	print('Here python!')
 	# print(type(csvfile))
 	fs = int(fs)
@@ -77,9 +73,6 @@ def FDD(csvfile,fs,nperseg,window):
 		s2.append(s[1])
 		s3.append(s[2])
 		ms[:,i] = u[:,0]
-	# ax.plot(Frequencies,20*np.log10(s1))
-	# ax.plot(Frequencies,20*np.log10(s2))
-	# ax.plot(Frequencies,20*np.log10(s3))
 	ax.plot(Frequencies,s1)
 	ax.plot(Frequencies,s2)
 	ax.plot(Frequencies,s3)
@@ -147,8 +140,6 @@ def SSI(csvfile,fs,order,s):
 	omega=list(sorted(set(omega)))
 	Phi=np.dot(C,phi)
 	Phi = Phi.tolist()
-	# print(omega,Phi)
-	# print(type(omega),type(Phi))
 	return omega
 
 def on_close(page, sockets):
@@ -156,7 +147,7 @@ def on_close(page, sockets):
 	print('Still have sockets open to', sockets)
 
 @eel.expose
-def Detect(modeltype,goaltype,csvfile,dof,effdof,orderuse,reg=True,lmax=3,alpha=10,tol=1e-6,nmax=1000):
+def StoreyDetect(modeltype,goaltype,csvfile,dof,effdof,orderuse,lmax,alpha,tol,nmax,reg=True):
 	# modeltype: string
 	# goaltype: string
 	# csvfile: string(dir)
@@ -181,15 +172,8 @@ def Detect(modeltype,goaltype,csvfile,dof,effdof,orderuse,reg=True,lmax=3,alpha=
 	eigvaluedata = eigvaluedatafem + eigvaluedatafem/eigvaluedata0*(eigvaluedata1-eigvaluedata0)
 	eigvaluedata = eigvaluedata[[x-1 for x in orderuse]]
 	weight = np.diag(1/eigvaluedata)
-	# print(dof)
-	# print(effdof)
-	# print(len(orderuse))
-	# print(type(modedata),modedata.shape)
-	# print(modedata)
-	# print(eigvaluedata)
-	# print(type(kstiff),kstiff.shape)
-	# print(kstiff)
 
+	
 	# Generate model.
 	if modeltype == "Storey":
 		model_ = det.Storey(numelem=dof, effdof=effdof, numeig=len(orderuse), modedata=modedata,
@@ -220,7 +204,7 @@ def Detect(modeltype,goaltype,csvfile,dof,effdof,orderuse,reg=True,lmax=3,alpha=
 	return results
 
 @eel.expose
-def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,TolLen,E,rho,area,Im,reg=True,lmax=4,alpha=100,tol=1e-6,nmax=1000):
+def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax,reg=True):
 	# modeltype: string
 	# goaltype: string
 	# csvfile: string(dir)
@@ -236,53 +220,21 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 	# print('Here python!')
 	# print(type(modeltype),type(goaltype),type(csvfile),type(numelem),type(MeasuredNodes),type(orderuse))
 	data_ = pd.read_csv(csvfile, header=None).values
-	# kstiff = data_[:,0].reshape((dof,1))
-	# mass = data_[:,1]
-	# modedata = data_[:,2:2+len(effdof)]
-	# modedata = modedata[[x-1 for x in orderuse],:].reshape((len(orderuse),))
-	# eigvaluedata0 = data_[:,2+len(effdof)]
-	# eigvaluedata1 = data_[:,2+len(effdof)+1]
-	# eigvaluedata0 = 2*math.pi*eigvaluedata0
-	# eigvaluedata1 = 2*math.pi*eigvaluedata1
-	# eigvaluedata0 = eigvaluedata0*eigvaluedata0
-	# eigvaluedata1 = eigvaluedata1*eigvaluedata1
-	# eigvaluedatafem = data_[:,-1]
-	# eigvaluedata = eigvaluedatafem + eigvaluedatafem/eigvaluedata0*(eigvaluedata1-eigvaluedata0)
-	# eigvaluedata = eigvaluedata[[x-1 for x in orderuse]]
-	# print(dof)
-	# print(effdof)
-	# print(len(orderuse))
-	# print(type(modedata),modedata.shape)
-	# print(eigvaluedata)
-	# print(type(kstiff),kstiff.shape)
-	
 	effdof = [2*MeasuredNode-1  for MeasuredNode in MeasuredNodes]
 	orderuse = [i-1 for i in orderuse]
 	numeig = len(orderuse)
-
-	# mode_data = np.ones((1, numelem))
 	mode_data = data_[:,0].reshape((numeig, len(MeasuredNodes))).T
-	# eigenvalue_data= 2*math.pi*np.array([23.09, 140.90, 407.75, 795.14, 1292.30, 1998.43])
 	eigenvalue_data= data_[:,1].reshape(numeig)
 	eigenvalue_data= eigenvalue_data*2*np.pi
 	eigenvalue_data= eigenvalue_data*eigenvalue_data
 	eigvaluedata = eigenvalue_data[orderuse]
 	modedata = mode_data[:, orderuse]
-	
-
 	weight = np.eye(numeig)
-	
-	# E=7.1e10
-	# rho=2.21e3
-	# area=0.0254*0.00635
-	# Im=1/12*0.0254*0.00635**3
-	# print(E,rho,area,Im)
-	
 	rhoA=rho*area
 	kstiff = E*Im*np.ones(numelem)
 	
 	# print(numelem,effdof,numeig,modedata,eigvaluedata,weight,TolLen,DirDOF,rhoA,kstiff)
-
+	
 	# Generate model.
 	if modeltype == "Beam":
 		model_ = det.Beam(numelem=numelem, effdof=effdof, numeig=numeig, modedata=modedata,
@@ -317,11 +269,8 @@ if __name__ == '__main__':
     'mode': "chrome-app", #or "chrome-app",
     'host': 'localhost',
     'port': 8080,
-    # 'chromeFlags': ["--start-fullscreen", "--browser-startup-dialog"]
     }
-	# eel.start('base1.html', options=my_options)
 	eel.init('web')
-	# eel.start('base.html', size=(1200,800), options=my_options, callback=on_close)
 	eel.start('index.html', size=(1200,900), options=my_options, callback=on_close)
 
 

@@ -145,7 +145,7 @@
                 <div class="col-md-6 form-group">
                   <span>
                     <strong class="text-muted mb-1">
-                      <label for="rho">rho</label>
+                      <label for="rho">Density</label>
                     </strong>
                   </span>
                   <input type="text" class="form-control" id="rho" placeholder="rho" value="2.21e3">
@@ -161,11 +161,27 @@
                 <div class="col-md-6 form-group">
                   <span>
                     <strong class="text-muted mb-1">
-                      <label for="area">area</label>
+                      <label for="area">Area</label>
                     </strong>
                   </span>
                   <input type="text" class="form-control" id="area" placeholder="area" value="1.6129e-4">
                 </div>
+              <div class="col-md-6 form-group">
+                <span>
+                <strong class="text-muted mb-1">
+                  <label for="tol">Tolerance of Convergence Criteria</label>
+                </strong>
+                </span>
+                <input type="text" class="form-control" id="tol" placeholder="tol" value="1e-6"> 
+              </div>
+              <div class="col-md-6 form-group">
+                <span>
+                <strong class="text-muted mb-1">
+                  <label for="nmax">Maximum Number of Iteration</label>
+                </strong>
+                </span>
+                <input type="text" class="form-control" id="nmax" placeholder="nmax" value="1000"> 
+              </div>
                 <div class="col-md-6 form-group">
                   <strong class="text-muted mb-1">
                     <label for="modeltype">Model Type</label>						
@@ -201,13 +217,13 @@
                           <strong class="text-muted mb-1">
                             <label for="alpha">&#945;</label>
                           </strong>
-                          <input type="number" class="form-control" name="L1-alpha" id="L1-alpha" value="4">
+                          <input type="number" class="form-control" name="L1-alpha" id="L1-alpha" value="100">
                         </div>
                         <div class="col-md-6 form-group">
                           <strong class="text-muted mb-1">
                             <label for="lmax">L-max</label>
                           </strong>
-                          <input type="number" class="form-control" name="L1-lmax" id="L1-lmax" value="100">
+                          <input type="number" class="form-control" name="L1-lmax" id="L1-lmax" value="4">
                         </div>
                       </div>
                       <div class="custom-control custom-radio mb-1">
@@ -431,6 +447,8 @@
           var E = Number($("#beamE").val());	              // 弹性模量。
           var area = Number($("#area").val());              // 梁横截面积。
           var Im = Number($("#Im").val());                  // 梁截面惯性矩。
+          var tol = Number($("#tol").val());                // 收敛标准的容许误差。
+          var nmax = Number($("#nmax").val());              // 最大迭代步数。
           // 检查是否采用正则化。
           if ($("#L1reg").is(':checked')) {
           	// 获取 L1 正则化需要的超参数。
@@ -451,10 +469,14 @@
           	// console.log(alpha);
           	// console.log('lmax:',typeof lmax);
           	// console.log(lmax);
-          // 调用后台python的Detect函数进行损伤计算并保存返回的结果于stiff。
+            // console.log('tol:',typeof tol);
+            // console.log(tol);
+            // console.log('nmax:',typeof nmax);
+            // console.log(nmax);
+          // 调用后台python的BeamDetect函数进行损伤计算并保存返回的结果于stiff。
 
 
-          var stiff = await eel.BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,TolLen,E,rho,area,Im,lmax=lmax,alpha=alpha)();
+          var stiff = await eel.BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax)();
           // // 控制台输出结果，检查是否正确。
           // console.log(stiff)
           // console.log(typeof stiff)
