@@ -156,32 +156,45 @@ def StoreyDetect(modeltype,goaltype,csvfile,dof,effdof,orderuse,lmax,alpha,tol,n
 	# orderuse: list
 	# print('Here python!')
 	# print(type(modeltype),type(goaltype),type(csvfile),type(dof),type(effdof),type(orderuse))
+	neffdof = len(effdof)
+	numeig = len(orderuse) 
 	data_ = pd.read_csv(csvfile, header=None).values
 	kstiff = data_[:,0]
 	kstiff = np.diagflat(kstiff)
 	mass = data_[:,1]
-	modedata = data_[:,2:2+len(effdof)]
-	modedata = modedata[[x-1 for x in orderuse],:].reshape((len(orderuse), len(effdof))).T
-	eigvaluedata0 = data_[:,2+len(effdof)]
-	eigvaluedata1 = data_[:,2+len(effdof)+1]
+	if neffdof == 1:
+		modedata = data_[:,2:2+neffdof]
+		modedata = modedata[[x-1 for x in orderuse],:].reshape((numeig, neffdof)).T
+		eigvaluedata0 = data_[:,2+neffdof]
+		eigvaluedata1 = data_[:,2+neffdof+1]
+		eigvaluedatafem = data_[:,-1]
+	else:
+		modedata0 = data_[[x-1 for x in orderuse]][:,2:2+neffdof]
+		modedata1 = data_[[x-1 for x in orderuse]][:,2+neffdof:2+neffdof*2]
+		modefem = data_[[x-1 for x in orderuse]][:,2+neffdof*2:2+neffdof*3]
+		modefem = modefem/modefem[-1]
+		modedata = modefem + (modedata1 - modedata0)
+		modedata = modedata.reshape((numeig, neffdof)).T
+		eigvaluedata0 = data_[[x-1 for x in orderuse]][:,2+neffdof*3]
+		eigvaluedata1 = data_[[x-1 for x in orderuse]][:,2+neffdof*3+1]
+		eigvaluedatafem = data_[[x-1 for x in orderuse]][:,-1]
+
 	eigvaluedata0 = 2*math.pi*eigvaluedata0
 	eigvaluedata1 = 2*math.pi*eigvaluedata1
 	eigvaluedata0 = eigvaluedata0*eigvaluedata0
 	eigvaluedata1 = eigvaluedata1*eigvaluedata1
-	eigvaluedatafem = data_[:,-1]
 	eigvaluedata = eigvaluedatafem + eigvaluedatafem/eigvaluedata0*(eigvaluedata1-eigvaluedata0)
 	eigvaluedata = eigvaluedata[[x-1 for x in orderuse]]
 	weight = np.diag(1/eigvaluedata)
 
-	
 	# Generate model.
-	if modeltype == "Storey":
-		model_ = det.Storey(numelem=dof, effdof=effdof, numeig=len(orderuse), modedata=modedata,
+	if modeltype == "剪切层":
+		model_ = det.Storey(numelem=dof, effdof=effdof, numeig=numeig, modedata=modedata,
 					 eigvaluedata=eigvaluedata, weight=weight, mass=mass, kstiff=kstiff)
 	else:
 		pass
 	# Generate goal function.
-	if goaltype == "Decoupled":
+	if goaltype == "解耦型":
 		goal_ = det.DecoupledGoal(model_)
 	else:
 		pass
@@ -236,13 +249,13 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 	# print(numelem,effdof,numeig,modedata,eigvaluedata,weight,TolLen,DirDOF,rhoA,kstiff)
 	
 	# Generate model.
-	if modeltype == "Beam":
+	if modeltype == "悬臂梁":
 		model_ = det.Beam(numelem=numelem, effdof=effdof, numeig=numeig, modedata=modedata,
 					 eigvaluedata=eigvaluedata, weight=weight, Toll=TolLen, Dir=DirDOF, rhoA=rhoA, kstiff=kstiff)
 	else:
 		pass
 	# Generate goal function.
-	if goaltype == "Decoupled":
+	if goaltype == "解耦型":
 		goal_ = det.DecoupledGoal(model_)
 	else:
 		pass
