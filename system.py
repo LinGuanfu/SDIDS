@@ -172,7 +172,7 @@ def StoreyDetect(modeltype,goaltype,csvfile,dof,effdof,orderuse,lmax,alpha,tol,n
 		modedata0 = data_[[x-1 for x in orderuse]][:,2:2+neffdof]
 		modedata1 = data_[[x-1 for x in orderuse]][:,2+neffdof:2+neffdof*2]
 		modefem = data_[[x-1 for x in orderuse]][:,2+neffdof*2:2+neffdof*3]
-		modefem = modefem/modefem[-1]
+		modefem = modefem/modefem[-1,-1]
 		modedata = modefem + (modedata1 - modedata0)
 		modedata = modedata.reshape((numeig, neffdof)).T
 		eigvaluedata0 = data_[[x-1 for x in orderuse]][:,2+neffdof*3]
@@ -247,7 +247,7 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 	kstiff = E*Im*np.ones(numelem)
 	
 	# print(numelem,effdof,numeig,modedata,eigvaluedata,weight,TolLen,DirDOF,rhoA,kstiff)
-	
+
 	# Generate model.
 	if modeltype == "悬臂梁":
 		model_ = det.Beam(numelem=numelem, effdof=effdof, numeig=numeig, modedata=modedata,
