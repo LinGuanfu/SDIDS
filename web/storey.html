@@ -341,15 +341,17 @@
             async function(){
               // ===================== Part A =========================
               //                                                      |
-              //       			这是需要注意的地方                   	|
+              //       			这是需要注意的地方                   	      |
               //                                                      |
               // 以下代码属于获取数据并计算损伤的全过程。 (已注释)        	|
               // 得依赖python的函数才能计算并得到用于画图用的损伤数据。  	|
-              // 单纯网页没有办法获得数据，所以先采用下一段人为构造的一组	|
+              // 单纯网页没有办法获得数据，所以先采用下一段人为构造的一组	  |
               // 损伤数据（Part B）作为可视化的输入。                    	|
               //                                                      |
-              // ======================================================				
-              // // 获取所有需要用到的参数。
+              // ======================================================
+              // 清空作图区域
+              $("#draw-bar").empty();
+              // 获取所有需要用到的参数。
               var csvfile = localStorage.getItem("csvfile");  	// 文件路径。
               var dof = Number($("#DOF").val());					// 自由度。
               var modeltype = $("#modeltype").val();				// 模型类型。
@@ -383,8 +385,8 @@
               // console.log('nmax:',typeof nmax);
               // console.log(nmax);
               // // 调用后台python的StoreyDetect函数进行损伤计算并保存返回的结果于stiff。
-               var stiff = await eel.StoreyDetect(modeltype,goaltype,localStorage.
-               	getItem("csvfile"),dof,effdof,orderuse,lmax,alpha,tol,nmax)();
+               // var stiff = await eel.StoreyDetect(modeltype,goaltype,localStorage.
+               // 	getItem("csvfile"),dof,effdof,orderuse,lmax,alpha,tol,nmax)();
               // // 控制台输出结果，检查是否正确。
               // console.log(stiff)
               // console.log(typeof stiff)
@@ -401,10 +403,10 @@
               // 以下代码属于人为构造的一组损伤数据作为可视化的输入。     	|
               //                                                      |
               // ======================================================				
-              // const sitff = [{'dof':1,'value':1.00},{'dof':2,'value':1.00},
-              //          {'dof':3,'value':1.00},{'dof':4,'value':1.00},
-              //          {'dof':5,'value':0.90},{'dof':6,'value':1.00},
-              //          {'dof':7,'value':1.00},{'dof':8,'value':1.00}];
+              const stiff = [{'dof':1,'value':1.00},{'dof':2,'value':1.00},
+                       {'dof':3,'value':1.00},{'dof':4,'value':1.00},
+                       {'dof':5,'value':0.90},{'dof':6,'value':1.00},
+                       {'dof':7,'value':1.00},{'dof':8,'value':1.00}];
       
               // ===================== Part C =========================
               //                                                      |
@@ -419,6 +421,8 @@
               var height = $("#draw-shapes svg").height()+margin.text;
       
               // 创建画布。
+
+
               var svg = await d3.select("#draw-bar")
                 .append("svg")
                   .attr("width", width)
