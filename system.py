@@ -233,11 +233,12 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 	# print('Here python!')
 	# print(type(modeltype),type(goaltype),type(csvfile),type(numelem),type(MeasuredNodes),type(orderuse))
 	data_ = pd.read_csv(csvfile, header=None).values
+	nmeanodes = len(MeasuredNodes)
 	effdof = [2*MeasuredNode-1  for MeasuredNode in MeasuredNodes]
 	orderuse = [i-1 for i in orderuse]
 	numeig = len(orderuse)
-	mode_data = data_[:,0].reshape((numeig, len(MeasuredNodes))).T
-	eigenvalue_data= data_[:,1].reshape(numeig)
+	mode_data = data_[:,0:nmeanodes].reshape((numeig, nmeanodes)).T
+	eigenvalue_data= data_[:,nmeanodes].reshape(numeig)
 	eigenvalue_data= eigenvalue_data*2*np.pi
 	eigenvalue_data= eigenvalue_data*eigenvalue_data
 	eigvaluedata = eigenvalue_data[orderuse]
