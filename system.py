@@ -172,7 +172,7 @@ def StoreyDetect(modeltype,goaltype,csvfile,dof,effdof,orderuse,lmax,alpha,tol,n
 		modedata0 = data_[[x-1 for x in orderuse]][:,2:2+neffdof]
 		modedata1 = data_[[x-1 for x in orderuse]][:,2+neffdof:2+neffdof*2]
 		modefem = data_[[x-1 for x in orderuse]][:,2+neffdof*2:2+neffdof*3]
-		modefem = modefem/modefem[-1]
+		modefem = modefem/modefem[-1,-1]
 		modedata = modefem + (modedata1 - modedata0)
 		modedata = modedata.reshape((numeig, neffdof)).T
 		eigvaluedata0 = data_[[x-1 for x in orderuse]][:,2+neffdof*3]
@@ -233,11 +233,12 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 	# print('Here python!')
 	# print(type(modeltype),type(goaltype),type(csvfile),type(numelem),type(MeasuredNodes),type(orderuse))
 	data_ = pd.read_csv(csvfile, header=None).values
+	nmeanodes = len(MeasuredNodes)
 	effdof = [2*MeasuredNode-1  for MeasuredNode in MeasuredNodes]
 	orderuse = [i-1 for i in orderuse]
 	numeig = len(orderuse)
-	mode_data = data_[:,0].reshape((numeig, len(MeasuredNodes))).T
-	eigenvalue_data= data_[:,1].reshape(numeig)
+	mode_data = data_[:,0:nmeanodes].reshape((numeig, nmeanodes)).T
+	eigenvalue_data= data_[:,nmeanodes].reshape(numeig)
 	eigenvalue_data= eigenvalue_data*2*np.pi
 	eigenvalue_data= eigenvalue_data*eigenvalue_data
 	eigvaluedata = eigenvalue_data[orderuse]
@@ -247,7 +248,7 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 	kstiff = E*Im*np.ones(numelem)
 	
 	# print(numelem,effdof,numeig,modedata,eigvaluedata,weight,TolLen,DirDOF,rhoA,kstiff)
-	
+
 	# Generate model.
 	if modeltype == "悬臂梁":
 		model_ = det.Beam(numelem=numelem, effdof=effdof, numeig=numeig, modedata=modedata,

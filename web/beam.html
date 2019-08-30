@@ -24,7 +24,7 @@
     <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
   </header>
 
-  <!-- 可视化部分菜单 Sidebar menu -->
+  <!-- 菜单 -->
   <div class="app-sidebar__overlay" data-toggle="sidebar"> </div>
   <aside class="app-sidebar">
     <ul class="app-menu">
@@ -40,18 +40,12 @@
       </li>
     </ul>
   </aside>
-  <!-- body 中的 main 部分。也就是可视化的图表等 Sidebar menu -->
   <main class="app-content">
-
-    <!-- main里面的第一行，表面这一行是什么内容。便于下面进行分析 -->
     <div class="app-title">
       <div>
         <h1><i class="app-menu__icon fa fa-laptop"></i> 悬臂梁模型 </h1>
       </div>
     </div>
-
-    <!-- %%%%%%%%%%%%%%%%%%%%%%%  以下是main里面的 主体部分， 比如数据的读取 可视化等  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
-
     <div class="container-fluid ">
       <div class="row">
         <div class="col-md-4">
@@ -242,13 +236,7 @@
 
       </div>
     </div>
-    <!-- %%%%%%%%%%%%%%%%%%%%%%%  以上是是主体部分， 比如数据的读取 可视化等  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
   </main>
-
-
-
-
-  <!--%%%%%%%%%%%%%%%%%%%%%%%%   main 之后，下面是脚本  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 
   <!-- Essential javascripts for application to work-->
   <script src="js/jquery-3.4.1.min.js"></script>
@@ -258,7 +246,6 @@
 
   <!-- %%%%%%%%%%%%%%%%%%  画图额外添加的 js   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
   <script src="js/d3.js"></script>
-  <!-- two.js 核心 js 文件 -->
   <script src="js/two.min.js"></script>
   <!-- eel (连接python和web实现数据交换的关键库) js 文件 -->
   <!-- <script type='text/javascript' src='/eel.js'></script> -->
@@ -283,11 +270,12 @@
 
     // ======================================================================
     //                                                                      |
-    //                            悬臂梁					    |
+    //                            悬臂梁					    
+    //                            创建剪切层模型                              |
     //                                                                      |
     // ------------------------------ 功能 ----------------------------------
     //                                                                      |
-    // 当你输入DOF并按下 Create 按钮时候 ---> 画出相应的楼层	                |
+    // 当你输入DOF并按下 Create 按钮时候 ---> 画出相应的楼层	                  |
     //                                                                      |
     // ------------------------------ 参考 ----------------------------------
     //                                                                      |
@@ -351,18 +339,18 @@
 
     // ======================================================================
     //                                                                      |
-    //                            可视化损伤结果							    |
+    //                            可视化损伤结果                              |
     //                                                                      |
     // ------------------------------ 功能 ----------------------------------
     //                                                                      |
-    // 当你输入剩下参数并按下 Calculate 按钮时候 --画出损伤图     	        |
+    // 当你输入剩下参数并按下 Calculate 按钮时候 --画出损伤图                   |
     //                                                                      |
     // ------------------------------ 参考 ----------------------------------
     //                                                                      |
-    // 全程使用 D3.js 库：https://d3js.org/									|
-    //					 https://github.com/d3/d3/wiki                      |
-    //					 https://www.d3-graph-gallery.com/                  |
-    //					 https://www.d3-graph-gallery.com/barplot.html      |
+    // 全程使用 D3.js 库：https://d3js.org/                                  |
+    //					 https://github.com/d3/d3/wiki                              |
+    //					 https://www.d3-graph-gallery.com/                          |
+    //					 https://www.d3-graph-gallery.com/barplot.html              |
     // 建议细读文档与例子看懂下面的代码                                       	|
     //                                                                      |
     // ======================================================================
@@ -371,20 +359,20 @@
         async function () {
 		
           // 获取所有需要用到的参数。
-          var csvfile = localStorage.getItem("csvfile");  	// 文件路径。
-          var numelem = Number($("#numelem").val());					// 单元数。
-          var modeltype = $("#modeltype").val();				// 模型类型。
-          var goaltype = $("#goaltype").val();				// 目标函数类型。
-          var MeasuredNodes = JSON.parse($("#MeasuredNodes").val());		// 测点。
-          var orderuse = JSON.parse($("#orderuse").val());  // 用到的频率阶数。
-          var DirDOF = JSON.parse($("#DirDOF").val());      // 固定的自由度。
-          var TolLen = Number($("#TolLen").val());          // 梁的总长度。
-          var rho = Number($("#rho").val());                // 密度。
-          var E = Number($("#beamE").val());	              // 弹性模量。
-          var area = Number($("#area").val());              // 梁横截面积。
-          var Im = Number($("#Im").val());                  // 梁截面惯性矩。
-          var tol = Number($("#tol").val());                // 收敛标准的容许误差。
-          var nmax = Number($("#nmax").val());              // 最大迭代步数。
+          var csvfile = localStorage.getItem("csvfile");              // 文件路径。
+          var numelem = Number($("#numelem").val());                  // 单元数。
+          var modeltype = $("#modeltype").val();                      // 模型类型。
+          var goaltype = $("#goaltype").val();                        // 目标函数类型。
+          var MeasuredNodes = JSON.parse($("#MeasuredNodes").val());	// 测点。
+          var orderuse = JSON.parse($("#orderuse").val());            // 用到的频率阶数。
+          var DirDOF = JSON.parse($("#DirDOF").val());                // 固定的自由度。
+          var TolLen = Number($("#TolLen").val());                    // 梁的总长度。
+          var rho = Number($("#rho").val());                          // 密度。
+          var E = Number($("#beamE").val());                          // 弹性模量。
+          var area = Number($("#area").val());                        // 梁横截面积。
+          var Im = Number($("#Im").val());                            // 梁截面惯性矩。
+          var tol = Number($("#tol").val());                          // 收敛标准的容许误差。
+          var nmax = Number($("#nmax").val());                        // 最大迭代步数。
           // 检查是否采用正则化。
           if ($("#L1reg").is(':checked')) {
           	// 获取 L1 正则化需要的超参数。
@@ -411,14 +399,14 @@
             // console.log(nmax);
           // 调用后台python的BeamDetect函数进行损伤计算并保存返回的结果于stiff。
 
+          var stiff = await eel.BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,
+                      orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax)();
 
-          var stiff = await eel.BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax)();
-          // // 控制台输出结果，检查是否正确。
+          // 控制台输出结果，检查是否正确。
           // console.log(stiff)
           // console.log(typeof stiff)
-
           } else { 
-          //     //如果不进行正则化，有待完成...
+          // 如果不进行正则化，有待完成...
           // 	console.log(dof,modeltype,goaltype,MeasuredNodes,orderuse);
           }
 
