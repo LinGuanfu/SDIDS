@@ -46740,11 +46740,11 @@ Processor.prototype = {
       // end of zoom control
     }
 
-    this.selectdiv = this.containerdiv.parentElement.querySelector('div#selectdiv');
+    this.selectdiv = this.containerdiv.parentElement.nextElementSibling.querySelector('div#selectdiv');
     if (!this.selectdiv) {
       this.selectdiv = document.createElement('div');
       this.selectdiv.id = 'selectdiv';
-      this.containerdiv.parentElement.appendChild(this.selectdiv);
+      this.containerdiv.parentElement.nextElementSibling.appendChild(this.selectdiv);
     }
     var element = document.createElement('input');
     element.setAttribute('type', 'range');
@@ -46775,20 +46775,20 @@ Processor.prototype = {
     };
     this.selectdiv.appendChild(element);
 
-    this.errordiv = this.containerdiv.parentElement.querySelector('div#errordiv');
+    this.errordiv = this.containerdiv.parentElement.nextElementSibling.querySelector('div#errordiv');
     if (!this.errordiv) {
       this.errordiv = document.createElement('div');
       this.errordiv.id = 'errordiv';
-      this.containerdiv.parentElement.appendChild(this.errordiv);
+      this.containerdiv.parentElement.nextElementSibling.appendChild(this.errordiv);
     }
     this.errorpre = document.createElement('pre');
     this.errordiv.appendChild(this.errorpre);
 
-    this.statusdiv = this.containerdiv.parentElement.querySelector('div#statusdiv');
+    this.statusdiv = this.containerdiv.parentElement.nextElementSibling.querySelector('div#statusdiv');
     if (!this.statusdiv) {
       this.statusdiv = document.createElement('div');
       this.statusdiv.id = 'statusdiv';
-      this.containerdiv.parentElement.appendChild(this.statusdiv);
+      this.containerdiv.parentElement.nextElementSibling.appendChild(this.statusdiv);
     }
     this.statusspan = document.createElement('span');
     this.statusspan.id = 'statusspan';
@@ -46821,7 +46821,7 @@ Processor.prototype = {
     if (!this.parametersdiv) {
       this.parametersdiv = document.createElement('div');
       this.parametersdiv.id = 'parametersdiv';
-      this.parametersdiv.classList.add('col-3');
+      this.parametersdiv.classList.add('col-2');
       this.containerdiv.parentElement.appendChild(this.parametersdiv);
     }
     // SDIDSchange input table to div
@@ -48169,6 +48169,7 @@ Viewer.defaults = function () {
       } },
     background: {
       color: { r: 0.93, g: 0.93, b: 0.93, a: 1.0 }
+      // color: { r: 0.125, g: 0.148, b: 0.180, a: 1.0 }
     }
   };
 };
