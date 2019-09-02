@@ -1,5 +1,5 @@
 // Here we define the user editable parameters:
-function getParameterDefinitions () {
+function getParameterDefinitions() {
   return [
     { name: 'numStorey', caption: '剪切层数目:', type: 'int', initial: 10, min: 3, max: 20, step: 1 },
     { name: 'pillarHeight', caption: '单层高度:', type: 'float', initial: 10 },
@@ -9,7 +9,7 @@ function getParameterDefinitions () {
   ];
 }
 
-function main (params) {
+function main(params) {
   var storey = involuteStorey(
     params.numStorey,
     params.pillarHeight,
