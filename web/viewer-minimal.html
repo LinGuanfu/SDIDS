@@ -31,6 +31,15 @@ Purpose:
           <div class="col-12 strike text-muted" id="modelcontrol">
             <span> 模 型 </span>
           </div>
+          <div class="form-group row">
+            <label for="modeltype" class="col-sm-5 col-form-label text-left">计算模型</label>
+            <div class="col-sm-7">
+              <select class="form-control" id="modeltype">
+                <option value="1">剪切层</option>
+                <option value="2">悬臂梁</option>
+              </select> 
+            </div>
+          </div>
           <div class="col-12 strike text-muted" id="parametercontrol">
             <span> 参 数 </span>
           </div>
@@ -130,8 +139,8 @@ Purpose:
               <option>解耦型</option>
               <option>耦合型</option>
             </select>   
-          </div>
- -->
+          </div> -->
+
           <div class="col-sm-12 p-2">
             <button class="btn btn-primary btn-block" id="Calculate">
               计算损伤
@@ -164,5 +173,33 @@ Purpose:
       $('input.regularization:radio').not(this).parent().next('div.reg-group').hide();
     }
   });
+  var cachebuster = null;
+
+  function reload_openjscad() {
+      if (cachebuster === null) {
+        $('script[src="min.js"]').remove();
+      } else {
+        $('script[src="min.js?cachebuster='+ cachebuster +'"]').remove();  
+      }
+      cachebuster = new Date().getTime();
+      $('<script>').attr('src', 'min.js?cachebuster='+ cachebuster).appendTo('head');
+  }
+
+  $(document).ready(
+    $("#modeltype").change(function(){
+      console.log('change!',$(this).val());
+      if ($(this).val() == 1){
+        console.log('change 1!');
+        $("#viewerContext").attr('design-url', 'storey-options.jscad');
+        reload_openjscad();
+      }
+      if ($(this).val() == 2){
+        console.log('change 2!');
+        $("#viewerContext").attr('design-url', 'logo.jscad');
+        reload_openjscad();
+      };
+    })
+  )
+
 </script>
 </html>
