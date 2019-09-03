@@ -46821,8 +46821,7 @@ Processor.prototype = {
     if (!this.parametersdiv) {
       this.parametersdiv = document.createElement('div');
       this.parametersdiv.id = 'parametersdiv';
-      // this.parametersdiv.classList.add('col-2');
-      this.containerdiv.parentElement.nextElementSibling.appendChild(this.parametersdiv);
+      this.containerdiv.parentElement.nextElementSibling.insertBefore(this.parametersdiv,this.containerdiv.parentElement.nextElementSibling.querySelector('div#parametercontrol'));
     }
     // SDIDSchange input table to div
     // this.parameterstable = document.createElement('table');
@@ -47358,7 +47357,7 @@ Processor.prototype = {
       // var tr = document.createElement('tr');
       // SDIDSchange input form.
       var tr = document.createElement('div');
-      tr.classList.add('form-group');
+      tr.classList.add('form-group','row');
       if (type === 'group') {
         var th = document.createElement('th');
         if ('className' in control) {
@@ -47382,24 +47381,23 @@ Processor.prototype = {
 
         // var td = document.createElement('td');
         // SDIDSchange input form.
-        var td = document.createElement('div');
 
-        var tdd = document.createElement('label');
+        var td = document.createElement('label');
         var label = paramdef.name + ':';
         if ('caption' in paramdef) {
           label = paramdef.caption;
-          tdd.className = 'caption';
+          td.className = 'caption';
           // SDIDSchange 
-          tdd.setAttribute('for',paramdef.name)
+          td.setAttribute('for',paramdef.name)
         }
-        tdd.innerHTML = label;
-        td.appendChild(tdd);
+        td.innerHTML = label;
+        td.classList.add('col-sm-5', 'col-form-label', 'text-left')
         tr.appendChild(td);
 
         // td = document.createElement('td');
         // SDIDSchange input form
         td = document.createElement('div');
-
+        td.classList.add('col-sm-7')
         td.appendChild(control);
         if ('label' in control) {
           td.appendChild(control.label);

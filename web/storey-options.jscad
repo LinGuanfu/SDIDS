@@ -20,6 +20,27 @@ function main(params) {
   return storey;
 }
 
+// function involuteStorey(numStorey, pillarHeight, storeyWidth, clearance, pillarPitch) {
+//   // body...
+//   if (arguments.length < 3) storeyWidth = 10;
+//   if (arguments.length < 4) clearance = 0;
+//   if (arguments.length < 4) pillarPitch = 0.1;
+
+//   var group = []
+//   for (var k = 0; k < numStorey; k++) {
+//     var pillarLeft = cylinder({r: pillarPitch, 
+//                                h: pillarHeight, 
+//                                center: [true,true,false]}).translate([0,-storeyWidth/2,pillarHeight*1.1*k])
+//     var pillarRight = cylinder({r: pillarPitch, 
+//                                 h: pillarHeight, 
+//                                 center: [true,true,false]}).translate([0,storeyWidth/2,pillarHeight*1.1*k])
+//     var storey = cube({size: [pillarPitch*2.5, storeyWidth*1.2, pillarHeight*0.1],
+//                        center: [true,true,false]}).translate([0,0,pillarHeight+(pillarHeight*1.1)*k])
+//     group.push(pillarLeft,pillarRight,storey)
+//   }
+//   return group
+// }
+
 function involuteStorey(numStorey, pillarHeight, storeyWidth, clearance, pillarPitch) {
   // body...
   if (arguments.length < 3) storeyWidth = 10;
@@ -28,15 +49,23 @@ function involuteStorey(numStorey, pillarHeight, storeyWidth, clearance, pillarP
 
   var group = []
   for (var k = 0; k < numStorey; k++) {
-    var pillarLeft = cylinder({r: pillarPitch, 
+    var pillar1 = cylinder({r: pillarPitch, 
                                h: pillarHeight, 
-                               center: [true,true,false]}).translate([0,-storeyWidth/2,pillarHeight*1.1*k])
-    var pillarRight = cylinder({r: pillarPitch, 
+                               center: [true,true,false]}).translate([storeyWidth/2,-storeyWidth/2,pillarHeight*1.1*k])
+    var pillar2 = cylinder({r: pillarPitch, 
+                               h: pillarHeight, 
+                               center: [true,true,false]}).translate([-storeyWidth/2,-storeyWidth/2,pillarHeight*1.1*k])
+       
+    var pillar3 = cylinder({r: pillarPitch, 
                                 h: pillarHeight, 
-                                center: [true,true,false]}).translate([0,storeyWidth/2,pillarHeight*1.1*k])
-    var storey = cube({size: [pillarPitch*2.5, storeyWidth*1.2, pillarHeight*0.1],
+                                center: [true,true,false]}).translate([storeyWidth/2,storeyWidth/2,pillarHeight*1.1*k])
+    var pillar4 = cylinder({r: pillarPitch, 
+                                h: pillarHeight, 
+                                center: [true,true,false]}).translate([-storeyWidth/2,storeyWidth/2,pillarHeight*1.1*k])
+    var storey = cube({size: [storeyWidth*1.2, storeyWidth*1.2, pillarHeight*0.1],
                        center: [true,true,false]}).translate([0,0,pillarHeight+(pillarHeight*1.1)*k])
-    group.push(pillarLeft,pillarRight,storey)
+    group.push(pillar1,pillar2,pillar3,pillar4,storey)
+    
   }
   return group
 }
