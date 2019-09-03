@@ -35,6 +35,7 @@ Purpose:
             <label for="modeltype" class="col-sm-5 col-form-label text-left">计算模型</label>
             <div class="col-sm-7">
               <select class="form-control" id="modeltype">
+                <option value=""></option>
                 <option value="1">剪切层</option>
                 <option value="2">悬臂梁</option>
               </select> 
@@ -187,19 +188,21 @@ Purpose:
 
   $(document).ready(
     $("#modeltype").change(function(){
-      console.log('change!',$(this).val());
       if ($(this).val() == 1){
-        console.log('change 1!');
+        console.log('footer first!');
         $("#viewerContext").attr('design-url', 'storey-options.jscad');
-        reload_openjscad();
+        // reload_openjscad();
       }
       if ($(this).val() == 2){
-        console.log('change 2!');
+        console.log('footer first!');
         $("#viewerContext").attr('design-url', 'logo.jscad');
-        reload_openjscad();
+        // reload_openjscad();
       };
     })
   )
+//   document.getElementById('modeltype').addEventListener('change', function (event) {
+//   init();
+// });
 
 </script>
 </html>
