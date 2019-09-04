@@ -9,9 +9,13 @@
 
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="min.css">
+
     <!-- Font-icon css-->
     <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
-    <script type='text/javascript' src='/eel.js'></script>
+    <!-- <script type='text/javascript' src='/eel.js'></script> -->
+    <script src="min.js"></script>
+
   </head>
 
 
@@ -37,21 +41,15 @@
         </ul>
       </aside>
 
-
-
-  <!-- body 中的 main 部分。也就是可视化的图表等 Sidebar menu -->
     <main class="app-content">
-      <!-- main里面的第一行，表面这一行是什么内容。便于下面进行分析 -->
       <div class="app-title">
         <div>
           <h1><i class="app-menu__icon fa fa-laptop"></i> 剪切层模型 </h1>
         </div>
       </div>
 
-      <!-- %%%%%%%%%%%%%%%%%%%%%%%  以下是main里面的 主体部分， 比如数据的读取 可视化等  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
-      <div class="container-fluid ">
+<!--       <div class="container-fluid ">
         <div class="row">
-
           <div class="col-md-4">
             <div class="row">
               <div class="col-md-12 form-group">
@@ -123,7 +121,6 @@
                   <option>耦合型</option>
                 </select>   
               </div>
-              <!-- %%%%%%%  Regularization  参数选择 部分 -->
               <div class="col-md-12 form-group">
                 <strong class="text-muted mb-2">正则化</strong>
                 <fieldset>
@@ -157,31 +154,34 @@
                     <label class="custom-control-label" for="noreg">不采用正则化 </label>
                   </div>
                 </ul>
-              <fieldset>
-              </div>
-      
-              <div class="col-md-6 p-2">
-                <button class="btn btn-primary btn-block" id="Create">创建模型</button>
+                </fieldset>
               </div>
               <div class="col-md-6 p-2">
-                <button class="btn btn-primary btn-block" id="Calculate">计算损伤</button>  
+                  <button class="btn btn-primary btn-block" id="Create">
+                    创建模型
+                  </button>
+              </div>
+              <div class="col-md-6 p-2">
+                <button class="btn btn-primary btn-block" id="Calculate">
+                  计算损伤
+                </button>  
               </div>
             </div>
           </div> 
-
-         
-            <div class="col-md-3" id="draw-shapes"></div> <!-- 占位符，左边画图的，这个是形状 -->
-            <div class="col-md-5"  id="draw-bar"></div> <!-- 占位符，左边画图的，这个是形状 -->
-       
-
+            <div class="col-md-3" id="draw-shapes"></div>
+            <div class="col-md-5"  id="draw-bar"></div> 
         </div>  
-
-      </div>   <!--  <div class="row"> -->
-
-
-
-        <!-- %%%%%%%%%%%%%%%%%%%%%%%  以上是是主体部分， 比如数据的读取 可视化等  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
-
+      </div>  -->
+  <div class="container" style="padding: 0 0 0 0;margin: -30px 0 0 -30px">
+    <div class="jscad-container row" style="padding:0;margin: 0">
+      <div class="col-8" oncontextmenu="return false;" id="viewerContext" design-url="storey-options.jscad"></div>
+    </div>
+    <div class="accepted">
+      <div id="tail" style="display: none;">
+        <div id="statusdiv"></div>
+      </div>      
+    </div>
+  </div>
 
     </main>
 
