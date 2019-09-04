@@ -10,7 +10,7 @@ Purpose:
 -->
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-  <title>OpenJSCAD.org Logo</title>
+  <title>SDIDS</title>
   <link rel="stylesheet" href="min.css" type="text/css">
   <!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
   <link rel="stylesheet" href="bootstrap.min.css" type="text/css">
@@ -44,85 +44,182 @@ Purpose:
           <div class="col-12 strike text-muted" id="parametercontrol">
             <span> 参 数 </span>
           </div>
-          <div class="form-group row">
-            <label for="selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
-            <div class="col-sm-7">
-              <span>
-                <button type="submit" class="btn btn-primary" value="getdatafile" id="selectbtn">
-                  Select
-                </button>
-              </span>
-              <span class="submitWord">未选择数据。</span>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="effdof" class="col-sm-5 col-form-label text-left">测点编号</label>
-            <div class="col-sm-7">
-              <input type="text" class="form-control" id="effdof", value="[8]">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="orderuse" class="col-sm-5 col-form-label text-left">数据阶数</label>
-            <div class="col-sm-7">
-              <input type="text" class="form-control" id="orderuse", value="[1,2,3,4,5,6,7]">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="tol" class="col-sm-5 col-form-label text-left">收敛因子</label>
-            <div class="col-sm-7">
-              <input type="text" class="form-control" id="tol", value="1.0e-6">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="nmax" class="col-sm-5 col-form-label text-left">最大迭代步数</label>
-            <div class="col-sm-7">
-              <input type="text" class="form-control" id="nmax", value="1000">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="goaltype" class="col-sm-5 col-form-label text-left">目标函数类型</label>
-            <div class="col-sm-7">
-              <select class="form-control" id="goaltype">
-                <option>解耦型</option>
-                <option>耦合型</option>
-              </select> 
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="regform" class="col-sm-4 col-form-label text-left">正则化</label>
-            <div class="col-sm-8">
-              <div id="regform">
-                <div class="custom-control custom-radio mb-1">
-                  <input type="radio" id="L1reg" name="regularization" class="custom-control-input regularization" value="L1" checked>
-                  <label class="custom-control-label" for="L1reg">L-1 (默认)</label>
-                </div>
-                    <div class="row reg-group" id="L1-reg-group" >
-                  <div class="col-md-6 form-group">
-                    <strong class="text-muted mb-1">
-                      <label for="alpha">&#945;</label>
-                    </strong>
-                    <input type="number" class="form-control" name="L1-alpha" id="L1-alpha" value="10"> 
-                  </div>
-                  <div class="col-md-6 form-group">
-                    <strong class="text-muted mb-1">
-                      <label for="lmax">L-max</label>
-                    </strong>
-                    <input type="number" class="form-control" name="L1-lmax" id="L1-lmax" value="3">    
-                  </div>            
-                </div>
-
-                <div class="custom-control custom-radio mb-1">
-                  <input type="radio"  id="L2reg"  name="regularization" class="custom-control-input regularization" value="L2">
-                  <label class="custom-control-label"  for="L2reg">L-2 </label>
-                </div>
-                <div class="custom-control custom-radio mb-1">
-                  <input type="radio" id="noreg" name="regularization" class="custom-control-input regularization" value="">
-                  <label class="custom-control-label" for="noreg">不采用正则化 </label>
-                </div>                
+          <div id="storey-control" class="control-form d-none">
+            <div class="form-group row">
+              <label for="selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
+              <div class="col-sm-7">
+                <span>
+                  <button type="submit" class="btn btn-primary" value="getdatafile" id="selectbtn">
+                    Select
+                  </button>
+                </span>
+                <span class="submitWord">未选择数据。</span>
               </div>
             </div>
-          </div>
+            <div class="form-group row">
+              <label for="effdof" class="col-sm-5 col-form-label text-left">测点编号</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="effdof", value="[8]">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="orderuse" class="col-sm-5 col-form-label text-left">数据阶数</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="orderuse", value="[1,2,3,4,5,6,7]">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="tol" class="col-sm-5 col-form-label text-left">收敛因子</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="tol", value="1.0e-6">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="nmax" class="col-sm-5 col-form-label text-left">最大迭代步数</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="nmax", value="1000">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="goaltype" class="col-sm-5 col-form-label text-left">目标函数类型</label>
+              <div class="col-sm-7">
+                <select class="form-control" id="goaltype">
+                  <option>解耦型</option>
+                  <option>耦合型</option>
+                </select> 
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="regform" class="col-sm-4 col-form-label text-left">正则化</label>
+              <div class="col-sm-8">
+                <div id="regform">
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" id="L1reg" name="regularization" class="custom-control-input regularization" value="L1" checked>
+                    <label class="custom-control-label" for="L1reg">L-1 (默认)</label>
+                  </div>
+                      <div class="row reg-group" id="L1-reg-group" >
+                    <div class="col-md-6 form-group">
+                      <strong class="text-muted mb-1">
+                        <label for="alpha">&#945;</label>
+                      </strong>
+                      <input type="number" class="form-control" name="L1-alpha" id="L1-alpha" value="10"> 
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <strong class="text-muted mb-1">
+                        <label for="lmax">L-max</label>
+                      </strong>
+                      <input type="number" class="form-control" name="L1-lmax" id="L1-lmax" value="3">    
+                    </div>            
+                  </div>
 
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio"  id="L2reg"  name="regularization" class="custom-control-input regularization" value="L2">
+                    <label class="custom-control-label"  for="L2reg">L-2 </label>
+                  </div>
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" id="noreg" name="regularization" class="custom-control-input regularization" value="">
+                    <label class="custom-control-label" for="noreg">不采用正则化 </label>
+                  </div>                
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 p-2">
+              <button class="btn btn-primary btn-block" id="Calculate">
+                计算损伤
+              </button>  
+            </div>           
+          </div>
+          <div id="beam-control" class="control-form d-none">
+            <div class="form-group row">
+              <label for="selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
+              <div class="col-sm-7">
+                <span>
+                  <button type="submit" class="btn btn-primary" value="getdatafile" id="selectbtn">
+                    Select
+                  </button>
+                </span>
+                <span class="submitWord">未选择数据。</span>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="effdof" class="col-sm-5 col-form-label text-left">测点编号</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="effdof", value="[20]">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="orderuse" class="col-sm-5 col-form-label text-left">数据阶数</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="orderuse", value="[1,2,3,4,5,6]">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="DirDOF" class="col-sm-5 col-form-label text-left">约束编号</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="DirDOF", value="[1,2]">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="tol" class="col-sm-5 col-form-label text-left">收敛因子</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="tol", value="1.0e-6">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="nmax" class="col-sm-5 col-form-label text-left">最大迭代步数</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="nmax", value="1000">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="goaltype" class="col-sm-5 col-form-label text-left">目标函数类型</label>
+              <div class="col-sm-7">
+                <select class="form-control" id="goaltype">
+                  <option>解耦型</option>
+                  <option>耦合型</option>
+                </select> 
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="regform" class="col-sm-4 col-form-label text-left">正则化</label>
+              <div class="col-sm-8">
+                <div id="regform">
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" id="L1reg" name="regularization" class="custom-control-input regularization" value="L1" checked>
+                    <label class="custom-control-label" for="L1reg">L-1 (默认)</label>
+                  </div>
+                      <div class="row reg-group" id="L1-reg-group" >
+                    <div class="col-md-6 form-group">
+                      <strong class="text-muted mb-1">
+                        <label for="alpha">&#945;</label>
+                      </strong>
+                      <input type="number" class="form-control" name="L1-alpha" id="L1-alpha" value="10"> 
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <strong class="text-muted mb-1">
+                        <label for="lmax">L-max</label>
+                      </strong>
+                      <input type="number" class="form-control" name="L1-lmax" id="L1-lmax" value="3">    
+                    </div>            
+                  </div>
+
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio"  id="L2reg"  name="regularization" class="custom-control-input regularization" value="L2">
+                    <label class="custom-control-label"  for="L2reg">L-2 </label>
+                  </div>
+                  <div class="custom-control custom-radio mb-1">
+                    <input type="radio" id="noreg" name="regularization" class="custom-control-input regularization" value="">
+                    <label class="custom-control-label" for="noreg">不采用正则化 </label>
+                  </div>                
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 p-2">
+              <button class="btn btn-primary btn-block" id="Calculate">
+                计算损伤
+              </button>
+            </div>          
+          </div>
 <!--           <div class="col-md-6 form-group">
             <strong class="text-muted mb-1">
               <label for="modeltype">模型类型</label>           
@@ -141,12 +238,11 @@ Purpose:
               <option>耦合型</option>
             </select>   
           </div> -->
-
-          <div class="col-sm-12 p-2">
+<!--           <div class="col-sm-12 p-2">
             <button class="btn btn-primary btn-block" id="Calculate">
               计算损伤
             </button>  
-          </div>
+          </div> -->
         </div>
         <div id="result-container" class="col-4 order-last">
           <div id="tail" style="display: none;">
@@ -174,35 +270,22 @@ Purpose:
       $('input.regularization:radio').not(this).parent().next('div.reg-group').hide();
     }
   });
-  var cachebuster = null;
 
-  function reload_openjscad() {
-      if (cachebuster === null) {
-        $('script[src="min.js"]').remove();
-      } else {
-        $('script[src="min.js?cachebuster='+ cachebuster +'"]').remove();  
-      }
-      cachebuster = new Date().getTime();
-      $('<script>').attr('src', 'min.js?cachebuster='+ cachebuster).appendTo('head');
-  }
 
+  // 获取文件路径。
   $(document).ready(
-    $("#modeltype").change(function(){
-      if ($(this).val() == 1){
-        console.log('footer first!');
-        $("#viewerContext").attr('design-url', 'storey-options.jscad');
-        // reload_openjscad();
+    $("#submitbtn").click(async function () {
+      var filepath = await eel.getPath()();
+      var extStart = filepath.lastIndexOf('.');
+      ext = filepath.substring(extStart, filepath.length).toUpperCase();
+      if (ext !== '.CSV') {
+        $('.submitWord').html("上传文件出错！");
+      } else {
+        localStorage.setItem("csvfile", filepath);
+        $('.submitWord').html(filepath);
+        console.log(localStorage.getItem("csvfile"));
       }
-      if ($(this).val() == 2){
-        console.log('footer first!');
-        $("#viewerContext").attr('design-url', 'beam3D.jscad');
-        // reload_openjscad();
-      };
     })
-  )
-//   document.getElementById('modeltype').addEventListener('change', function (event) {
-//   init();
-// });
-
+  );
 </script>
 </html>
