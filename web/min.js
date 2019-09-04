@@ -48145,9 +48145,10 @@ function Viewer(containerelement, options) {
 Viewer.defaults = function () {
   return {
     camera: {
+      // SDIDSchange viewer setting.
       fov: 45, // field of view
-      // angle: { x: -60, y: 0, z: -45 }, // view angle about XYZ axis
-      angle: { x: -90, y: 0, z: -90 }, // view angle about XYZ axis
+      angle: { x: -60, y: 0, z: -45 }, // view angle about XYZ axis
+      // angle: { x: -90, y: 0, z: -90 }, // view angle about XYZ axis
       // position: { x: 0, y: 0, z: 100 }, // initial position at XYZ
       position: { x: 0, y: -60, z: 200 }, // initial position at XYZ
       clip: { min: 0.5, max: 1000 // rendering outside this range is clipped
