@@ -46836,7 +46836,6 @@ Processor.prototype = {
       element.innerHTML = '更新模型';
       element.id = 'updateButton';
       element.classList.add('btn', 'btn-primary', 'btn-block');
-      console.log('element')
     }
     element.onclick = function (e) {
       that.rebuildSolids();
@@ -47469,8 +47468,8 @@ var Processor = require('../jscad/processor');
 var gProcessor = null;
 
 function init() {
-  var versionText = 'OpenJSCAD.org Version ' + version;
-  console.log(versionText);
+  // var versionText = 'OpenJSCAD.org Version ' + version;
+  // console.log(versionText);
 
   // Show all exceptions to the user: // WARNING !! this is not practical at dev time
   AlertUserOfUncaughtExceptions();
@@ -47482,7 +47481,7 @@ function init() {
     // console.log(this.value);
     switch (this.value) {
       case '1':
-        var design = 'storey-options.jscad';
+        var design = './models/storey-options.jscad';
         var c = document.querySelectorAll('.control-form');
         var i;
         for (var i=0; i<c.length; i++) {
@@ -47491,7 +47490,7 @@ function init() {
         document.getElementById('storey-control').className = 'control-form d-block';
         break;
       case '2':
-        var design = 'beam3D.jscad';
+        var design = './models/beam-options.jscad';
         var c = document.querySelectorAll('.control-form');
         var i;
         for (var i=0; i<c.length; i++) {
@@ -47500,7 +47499,7 @@ function init() {
         document.getElementById('beam-control').className = 'control-form d-block';
         break;
     }
-    console.log(design);
+    // console.log(design);
     // load the given design
     if (design) {
       var xhr = new XMLHttpRequest();
@@ -47525,7 +47524,6 @@ function init() {
 document.addEventListener('DOMContentLoaded', function (event) {
   init();
 });
-console.log('hello');
 
 },{"../../package.json":228,"../jscad/processor":234,"./errorDispatcher":235}],237:[function(require,module,exports){
 'use strict';
@@ -50523,4 +50521,3 @@ var GL = function () {
 module.exports = GL;
 
 },{}]},{},[236]);
-console.log(document.getElementById('modeltype'));
