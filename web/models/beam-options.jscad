@@ -1,9 +1,9 @@
 function getParameterDefinitions () {
   return [
-    {name: 'tolLen', type: 'float', initial: 100, caption: '梁长度：'},
+    // {name: 'tolLen', type: 'float', initial: 100, caption: '梁长度：'},
     {name: 'numElement', type: 'int', initial: 20, caption: '单元数：'},
-    {name: 'sectionHeight', type: 'float', initial: 2.5, caption: '截面高度'},
-    {name: 'sectionWidth', type: 'float', initial: 5, caption: '截面宽度'},
+    // {name: 'sectionHeight', type: 'float', initial: 2.5, caption: '截面高度'},
+    // {name: 'sectionWidth', type: 'float', initial: 5, caption: '截面宽度'},
     {name: 'beamE', type: 'float', initial: 7.1e10, caption: '弹性模量 E'},
     {name: 'beamRho', type: 'float', initial: 2.21e3, caption: '密度 &#961;'},
   ];
@@ -11,10 +11,10 @@ function getParameterDefinitions () {
 
 function main (params) {
 
-var tolLen = params.tolLen;
+var tolLen = 100;
 var numElement = params.numElement;
-var sectionHeight = params.sectionHeight;
-var sectionWidth = params.sectionWidth;
+var sectionHeight = 2.5;
+var sectionWidth = 5;
 var typeSupport = params.typeSupport;
 var solidBeamEle = Creatbeamele(tolLen,numElement,sectionHeight,sectionWidth,typeSupport);
 var solidBeamType= Creatbeamtype(tolLen,numElement,sectionHeight,sectionWidth,typeSupport);
