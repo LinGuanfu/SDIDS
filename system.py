@@ -147,15 +147,17 @@ def on_close(page, sockets):
 	print('Still have sockets open to', sockets)
 
 @eel.expose
-def StoreyDetect(modeltype,goaltype,csvfile,dof,effdof,orderuse,lmax,alpha,tol,nmax,reg=True):
-	# modeltype: string
+def StoreyDetect(goaltype,csvfile,dof,effdof,orderuse,lmax,alpha,tol,nmax,reg=True):
 	# goaltype: string
 	# csvfile: string(dir)
 	# dof: integer
 	# effdof: list
 	# orderuse: list
-	# print('Here python!')
-	# print(type(modeltype),type(goaltype),type(csvfile),type(dof),type(effdof),type(orderuse))
+	print('Here python!')
+	print(type(goaltype), type(csvfile), type(dof), type(effdof), type(orderuse))
+	print(goaltype, csvfile, dof, effdof, orderuse)
+
+
 	neffdof = len(effdof)
 	numeig = len(orderuse) 
 	data_ = pd.read_csv(csvfile, header=None).values
@@ -188,11 +190,8 @@ def StoreyDetect(modeltype,goaltype,csvfile,dof,effdof,orderuse,lmax,alpha,tol,n
 	weight = np.diag(1/eigvaluedata)
 
 	# Generate model.
-	if modeltype == "剪切层":
-		model_ = det.Storey(numelem=dof, effdof=effdof, numeig=numeig, modedata=modedata,
-					 eigvaluedata=eigvaluedata, weight=weight, mass=mass, kstiff=kstiff)
-	else:
-		pass
+	model_ = det.Storey(numelem=dof, effdof=effdof, numeig=numeig, modedata=modedata,
+						eigvaluedata=eigvaluedata, weight=weight, mass=mass, kstiff=kstiff)
 	# Generate goal function.
 	if goaltype == "解耦型":
 		goal_ = det.DecoupledGoal(model_)
@@ -217,8 +216,7 @@ def StoreyDetect(modeltype,goaltype,csvfile,dof,effdof,orderuse,lmax,alpha,tol,n
 	return results
 
 @eel.expose
-def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax,reg=True):
-	# modeltype: string
+def BeamDetect(goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax,reg=True):
 	# goaltype: string
 	# csvfile: string(dir)
 	# numelem: integer
@@ -230,8 +228,10 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 	# rho: float
 	# area: float
 	# Im: float
-	# print('Here python!')
-	# print(type(modeltype),type(goaltype),type(csvfile),type(numelem),type(MeasuredNodes),type(orderuse))
+	print('Here python!')
+	print(type(goaltype), type(csvfile), type(numelem), type(MeasuredNodes), type(orderuse))
+	print(goaltype, csvfile, numelem, MeasuredNodes, orderuse)
+
 	data_ = pd.read_csv(csvfile, header=None).values
 	nmeanodes = len(MeasuredNodes)
 	effdof = [2*MeasuredNode-1  for MeasuredNode in MeasuredNodes]
@@ -250,11 +250,8 @@ def BeamDetect(modeltype,goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,
 	# print(numelem,effdof,numeig,modedata,eigvaluedata,weight,TolLen,DirDOF,rhoA,kstiff)
 
 	# Generate model.
-	if modeltype == "悬臂梁":
-		model_ = det.Beam(numelem=numelem, effdof=effdof, numeig=numeig, modedata=modedata,
-					 eigvaluedata=eigvaluedata, weight=weight, Toll=TolLen, Dir=DirDOF, rhoA=rhoA, kstiff=kstiff)
-	else:
-		pass
+	model_ = det.Beam(numelem=numelem, effdof=effdof, numeig=numeig, modedata=modedata,
+					  eigvaluedata=eigvaluedata, weight=weight, Toll=TolLen, Dir=DirDOF, rhoA=rhoA, kstiff=kstiff)
 	# Generate goal function.
 	if goaltype == "解耦型":
 		goal_ = det.DecoupledGoal(model_)
