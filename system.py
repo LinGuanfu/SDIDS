@@ -282,7 +282,7 @@ if __name__ == '__main__':
     'port': 8080,
     }
 	eel.init('web')
-	eel.start('index.html', size=(1200,900), options=my_options, callback=on_close)
+	eel.start('index.html', size=(1920,1080), options=my_options, callback=on_close)
 
 
 	
