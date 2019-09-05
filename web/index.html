@@ -153,6 +153,24 @@
               </div>
             </div>
             <div class="form-group row">
+              <label for="beamTolLen" class="col-sm-5 col-form-label text-left">梁总长度</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="beamTolLen", value="0.4953">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="beamSectionWidth" class="col-sm-5 col-form-label text-left">梁横截面宽度</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="beamSectionWidth", value="0.0254">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="beamSectionHeight" class="col-sm-5 col-form-label text-left">梁横截面高度</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="beamSectionHeight", value="0.00635">
+              </div>
+            </div>
+            <div class="form-group row">
               <label for="beamTol" class="col-sm-5 col-form-label text-left">收敛因子</label>
               <div class="col-sm-7">
                 <input type="text" class="form-control" id="beamTol", value="1.0e-6">
@@ -186,13 +204,13 @@
                       <strong class="text-muted mb-1">
                         <label for="beamL1Alpha">&#945;</label>
                       </strong>
-                      <input type="number" class="form-control" name="L1-alpha" id="beamL1Alpha" value="10"> 
+                      <input type="number" class="form-control" name="L1-alpha" id="beamL1Alpha" value="100"> 
                     </div>
                     <div class="col-md-6 form-group">
                       <strong class="text-muted mb-1">
                         <label for="beamL1Lmax">L-max</label>
                       </strong>
-                      <input type="number" class="form-control" name="L1-lmax" id="beamL1Lmax" value="3">    
+                      <input type="number" class="form-control" name="L1-lmax" id="beamL1Lmax" value="4">    
                     </div>            
                   </div>
 
@@ -279,7 +297,7 @@
   $(document).ready(
     $(".calculate").click(
       async function () {
-        console.log(typeof($("#modeltype").val()),$("#modeltype").val());
+        // console.log(typeof($("#modeltype").val()),$("#modeltype").val());
         switch (Number($("#modeltype").val())){
           case 1:
             var csvfile = localStorage.getItem("csvfile");    // 文件路径。
@@ -295,28 +313,28 @@
               var alpha = Number($("#storeyL1Alpha").val());
               var lmax = Number($("#storeyL1Lmax").val());
             //  // 控制台输出参数，以便查看数据类型和数据是否正确。
-              console.log('dof:',typeof dof);
-              console.log(dof);
-              console.log('goaltype:',typeof goaltype);
-              console.log(goaltype);
-              console.log('effdof:',typeof effdof);
-              console.log(effdof);
-              console.log('orderuse:',typeof orderuse);
-              console.log(orderuse);
-              console.log('alpha:',typeof alpha);
-              console.log(alpha);
-              console.log('lmax:',typeof lmax);
-              console.log(lmax);
-              console.log('tol:',typeof tol);
-              console.log(tol);
-              console.log('nmax:',typeof nmax);
-              console.log(nmax);
+              // console.log('dof:',typeof dof);
+              // console.log(dof);
+              // console.log('goaltype:',typeof goaltype);
+              // console.log(goaltype);
+              // console.log('effdof:',typeof effdof);
+              // console.log(effdof);
+              // console.log('orderuse:',typeof orderuse);
+              // console.log(orderuse);
+              // console.log('alpha:',typeof alpha);
+              // console.log(alpha);
+              // console.log('lmax:',typeof lmax);
+              // console.log(lmax);
+              // console.log('tol:',typeof tol);
+              // console.log(tol);
+              // console.log('nmax:',typeof nmax);
+              // console.log(nmax);
             // // 调用后台python的StoreyDetect函数进行损伤计算并保存返回的结果于stiff。
               var stiff = await eel.StoreyDetect(goaltype,localStorage.
                 getItem("csvfile"),dof,effdof,orderuse,lmax,alpha,tol,nmax)();
             // // 控制台输出结果，检查是否正确。
-              console.log(stiff)
-              console.log(typeof stiff)
+              // console.log(stiff)
+              // console.log(typeof stiff)
     
             } else { 
             //     //如果不进行正则化，有待完成...
@@ -331,47 +349,47 @@
             var MeasuredNodes = JSON.parse($("#beamEffDof").val());  // 测点。
             var orderuse = JSON.parse($("#beamOrderUse").val());            // 用到的频率阶数。
             var DirDOF = JSON.parse($("#beamDirDof").val());                // 固定的自由度。
-            var TolLen = Number($("#tolLen").val());                    // 梁的总长度。
+            var TolLen = Number($("#beamTolLen").val());                    // 梁的总长度。
             var rho = Number($("#beamRho").val());                          // 密度。
             var E = Number($("#beamE").val());                          // 弹性模量。
-            var sectionHeight = Number($("#sectionHeight").val());
-            var sectionWidth = Number($("#sectionWidth").val());
+            var sectionHeight = Number($("#beamSectionHeight").val());
+            var sectionWidth = Number($("#beamSectionWidth").val());
             var area = sectionWidth*sectionHeight;                        // 梁横截面积。
             var Im = 1/12*sectionWidth*Math.pow(sectionHeight,3);                            // 梁截面惯性矩。
             var tol = Number($("#beamTol").val());                          // 收敛标准的容许误差。
             var nmax = Number($("#beamNmax").val());                        // 最大迭代步数。
             // 检查是否采用正则化。
-            if ($("#L1reg").is(':checked')) {
+            if ($("#beamL1Reg").is(':checked')) {
               // 获取 L1 正则化需要的超参数。
-              var alpha = Number($("#L1-alpha").val());
-              var lmax = Number($("#L1-lmax").val());
+              var alpha = Number($("#beamL1Alpha").val());
+              var lmax = Number($("#beamL1Lmax").val());
               // 控制台输出参数，以便查看数据类型和数据是否正确。
-              console.log('numelem:',typeof numelem);
-              console.log(numelem);
-              console.log('modeltype:',typeof modeltype);
-              console.log(modeltype);
-              console.log('goaltype:',typeof goaltype);
-              console.log(goaltype);
-              console.log('MeasuredNodes:',typeof MeasuredNodes);
-              console.log(MeasuredNodes);
-              console.log('orderuse:',typeof orderuse);
-              console.log(orderuse);
-              console.log('alpha:',typeof alpha);
-              console.log(alpha);
-              console.log('lmax:',typeof lmax);
-              console.log(lmax);
-              console.log('tol:',typeof tol);
-              console.log(tol);
-              console.log('nmax:',typeof nmax);
-              console.log(nmax);
+              // console.log('numelem:',typeof numelem);
+              // console.log(numelem);
+              // console.log('modeltype:',typeof modeltype);
+              // console.log(modeltype);
+              // console.log('goaltype:',typeof goaltype);
+              // console.log(goaltype);
+              // console.log('MeasuredNodes:',typeof MeasuredNodes);
+              // console.log(MeasuredNodes);
+              // console.log('orderuse:',typeof orderuse);
+              // console.log(orderuse);
+              // console.log('alpha:',typeof alpha);
+              // console.log(alpha);
+              // console.log('lmax:',typeof lmax);
+              // console.log(lmax);
+              // console.log('tol:',typeof tol);
+              // console.log(tol);
+              // console.log('nmax:',typeof nmax);
+              // console.log(nmax);
             // 调用后台python的BeamDetect函数进行损伤计算并保存返回的结果于stiff。
 
             var stiff = await eel.BeamDetect(goaltype,csvfile,numelem,MeasuredNodes,
                         orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax)();
 
             // 控制台输出结果，检查是否正确。
-            console.log(stiff)
-            console.log(typeof stiff)
+            // console.log(stiff)
+            // console.log(typeof stiff)
             } else { 
             // 如果不进行正则化，有待完成...
             //  console.log(dof,modeltype,goaltype,MeasuredNodes,orderuse);
@@ -380,12 +398,10 @@
         } // SWITCH
 
 // <!-- --------------------------------下--------------------------------------------- -->
- // var numelem = 8;
-  // var numelem = Number($("#numelem").val());         // 单元数。
-
- // var stiff = [{ 'dof': 1, 'value': 1.00 }, { 'dof': 2, 'value': 1.00 }, { 'dof': 3, 'value': 0.9 }, { 'dof': 4, 'value': 1.00 },
-//  { 'dof': 5, 'value': 0.95 },{ 'dof': 6, 'value': 0.95 },{ 'dof': 7, 'value': 0.85 },{ 'dof': 8, 'value': 0.9}];
-   numelem=stiff.length
+  // var numelem = 8;
+  // var stiff = [{ 'dof': 1, 'value': 1.00 }, { 'dof': 2, 'value': 1.00 }, { 'dof': 3, 'value': 0.9 }, { 'dof': 4, 'value': 1.00 },
+  // { 'dof': 5, 'value': 0.95 },{ 'dof': 6, 'value': 0.95 },{ 'dof': 7, 'value': 0.85 },{ 'dof': 8, 'value': 0.9}];
+  numelem=stiff.length
   var sx = Array.from({ length: numelem }, (item, index) => index + 1);
   var stiffvalue = new Array(numelem)
   for (i = 0; i < stiff.length; i++) {
@@ -411,11 +427,6 @@
       } // click 下的function
     )
   );
-
-
-
-
-  
 
   // 获取文件路径。
   $(document).ready(
