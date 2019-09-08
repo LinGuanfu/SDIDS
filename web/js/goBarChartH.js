@@ -69,7 +69,7 @@ function goBarChartH(dataArr){
        var width = dwidth.split("px")[0] * 9 / 10;
        var height = dheight.split("px")[0];
         canvas.width = width * 2 ;
-        canvas.height = 300* 2;
+        canvas.height = 480* 2;
 
         canvas.style.height = canvas.height/2 + "px";
         canvas.style.width = canvas.width/2 + "px";
@@ -89,7 +89,7 @@ function goBarChartH(dataArr){
                 maxValue = barVal;
             }
         }
-        maxValue += 0.75;
+        maxValue += 1.2;
         totalYNomber = 1;
         // 运动相关
         ctr = 1;

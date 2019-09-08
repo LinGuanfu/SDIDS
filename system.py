@@ -153,9 +153,9 @@ def StoreyDetect(goaltype,csvfile,dof,effdof,orderuse,lmax,alpha,tol,nmax,reg=Tr
 	# dof: integer
 	# effdof: list
 	# orderuse: list
-	print('Here python!')
-	print(type(goaltype), type(csvfile), type(dof), type(effdof), type(orderuse))
-	print(goaltype, csvfile, dof, effdof, orderuse)
+	# print('Here python!')
+	# print(type(goaltype), type(csvfile), type(dof), type(effdof), type(orderuse))
+	# print(goaltype, csvfile, dof, effdof, orderuse)
 
 
 	neffdof = len(effdof)
@@ -228,9 +228,9 @@ def BeamDetect(goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,TolLen,E,r
 	# rho: float
 	# area: float
 	# Im: float
-	print('Here python!')
-	print(type(goaltype), type(csvfile), type(numelem), type(MeasuredNodes), type(orderuse))
-	print(goaltype, csvfile, numelem, MeasuredNodes, orderuse)
+	# print('Here python!')
+	# print(type(goaltype), type(csvfile), type(numelem), type(MeasuredNodes), type(orderuse))
+	# print(goaltype, csvfile, numelem, MeasuredNodes, orderuse)
 
 	data_ = pd.read_csv(csvfile, header=None).values
 	nmeanodes = len(MeasuredNodes)
