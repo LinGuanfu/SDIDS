@@ -330,14 +330,15 @@
               // console.log('nmax:',typeof nmax);
               // console.log(nmax);
             // // 调用后台python的StoreyDetect函数进行损伤计算并保存返回的结果于stiff。
-              var stiff = await eel.StoreyDetect(goaltype,localStorage.
-                getItem("csvfile"),dof,effdof,orderuse,lmax,alpha,tol,nmax)();
+              var stiff = await eel.StoreyDetect(goaltype,csvfile,dof,effdof,orderuse,lmax,alpha,tol,nmax)();
             // // 控制台输出结果，检查是否正确。
               // console.log(stiff)
               // console.log(typeof stiff)
-              if (stiff){
 
-              }
+              // if (stiff){
+
+              // }
+
             } else { 
             //     //如果不进行正则化，有待完成...
             //  console.log(dof,goaltype,effdof,orderuse);
@@ -388,10 +389,12 @@
 
             var stiff = await eel.BeamDetect(goaltype,csvfile,numelem,MeasuredNodes,
                         orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax)();
-            var state = await eel.creatStoreyModeShapeJSCAD(stiff);
-            if (state == 1){
-              $('#stateDiv').attr('state','1');
-            }
+
+            // var state = await eel.creatStoreyModeShapeJSCAD(stiff);
+            // if (state == 1){
+            //   $('#stateDiv').attr('state','1');
+            // }
+
             // 控制台输出结果，检查是否正确。
             // console.log(stiff)
             // console.log(typeof stiff)
