@@ -335,7 +335,9 @@
             // // 控制台输出结果，检查是否正确。
               // console.log(stiff)
               // console.log(typeof stiff)
-    
+              if (stiff){
+
+              }
             } else { 
             //     //如果不进行正则化，有待完成...
             //  console.log(dof,goaltype,effdof,orderuse);
@@ -386,7 +388,10 @@
 
             var stiff = await eel.BeamDetect(goaltype,csvfile,numelem,MeasuredNodes,
                         orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax)();
-
+            var state = await eel.creatStoreyModeShapeJSCAD(stiff);
+            if (state == 1){
+              $('#stateDiv').attr('state','1');
+            }
             // 控制台输出结果，检查是否正确。
             // console.log(stiff)
             // console.log(typeof stiff)
