@@ -47477,50 +47477,28 @@ function init() {
   var viewer = document.getElementById('viewerContext');
   gProcessor = new Processor(viewer);
 
-  document.getElementById('modeltype').addEventListener('change', function (event) {
-    // console.log(this.value);
-    switch (this.value) {
-      case '1':
-        var design = './models/storey-options.jscad';
-        var c = document.querySelectorAll('.control-form');
-        var i;
-        for (var i=0; i<c.length; i++) {
-          c[i].className = 'control-form d-none';
-        }
-        document.getElementById('storey-control').className = 'control-form d-block';
-        break;
-      case '2':
-        var design = './models/beam-options.jscad';
-        var c = document.querySelectorAll('.control-form');
-        var i;
-        for (var i=0; i<c.length; i++) {
-          c[i].className = 'control-form d-none';
-        }
-        document.getElementById('beam-control').className = 'control-form d-block';
-        break;
-    }
-    // console.log(design);
-    // load the given design
-    if (design) {
-      var xhr = new XMLHttpRequest();
-
-      xhr.open('GET', design, true);
-      gProcessor.setStatus('Loading ' + design + " <img id=busy src='images/busy.gif'>");
-
-      xhr.onload = function () {
-        var source = this.responseText;
-        // console.log(source);
-
-        if (design.match(/\.jscad$/i) || design.match(/\.js$/i)) {
-          gProcessor.setStatus('Processing ' + design + " <img id=busy src='images/busy.gif'>");
-          gProcessor.setJsCad(source, design);
-        }
-      };
-      xhr.send();
-    }
-  });
-  // document.getElementById('stateDiv').addEventListener('change', function (event) {
-  //   var design = './models/storeyModeShape.jscad';
+  // document.getElementById('modeltype').addEventListener('change', function (event) {
+  //   // console.log(this.value);
+  //   switch (this.value) {
+  //     case '1':
+  //       var design = './models/storey-options.jscad';
+  //       var c = document.querySelectorAll('.control-form');
+  //       var i;
+  //       for (var i=0; i<c.length; i++) {
+  //         c[i].className = 'control-form d-none';
+  //       }
+  //       document.getElementById('storey-control').className = 'control-form d-block';
+  //       break;
+  //     case '2':
+  //       var design = './models/beam-options.jscad';
+  //       var c = document.querySelectorAll('.control-form');
+  //       var i;
+  //       for (var i=0; i<c.length; i++) {
+  //         c[i].className = 'control-form d-none';
+  //       }
+  //       document.getElementById('beam-control').className = 'control-form d-block';
+  //       break;
+  //   }
   //   // console.log(design);
   //   // load the given design
   //   if (design) {
@@ -47541,6 +47519,29 @@ function init() {
   //     xhr.send();
   //   }
   // });
+  document.getElementById('stateDiv').addEventListener('change', function (event) {
+    console.log('stateDiv');
+    var design = './models/storeyModeShape.jscad';
+    // console.log(design);
+    // load the given design
+    if (design) {
+      var xhr = new XMLHttpRequest();
+
+      xhr.open('GET', design, true);
+      gProcessor.setStatus('Loading ' + design + " <img id=busy src='images/busy.gif'>");
+
+      xhr.onload = function () {
+        var source = this.responseText;
+        // console.log(source);
+
+        if (design.match(/\.jscad$/i) || design.match(/\.js$/i)) {
+          gProcessor.setStatus('Processing ' + design + " <img id=busy src='images/busy.gif'>");
+          gProcessor.setJsCad(source, design);
+        }
+      };
+      xhr.send();
+    }
+  });
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {
