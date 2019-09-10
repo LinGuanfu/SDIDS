@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="./css/min.css">
   <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" >
   <script type='text/javascript' src='/eel.js'></script>
-  <script src="./js/min.js?v=2"></script>
+  <script src="./js/min.js?v=3"></script>
 </head>
 <body>
   <div class="main-content">
@@ -22,27 +22,27 @@
         </div>
         <div id="control-container" class="col-md-2 order-first scrollbar-ripe-malinka sidebar">
           <div class="col-12 strike text-muted" id="modelcontrol">
-            <span> 模 型 </span>
+            <span> 模态分析 </span>
           </div>
           <div class="form-group row">
-            <label for="modeltype" class="col-sm-5 col-form-label text-left">计算模型</label>
+            <label for="modeltype" class="col-sm-5 col-form-label text-left">分析方法</label>
             <div class="col-sm-7">
               <select class="form-control" id="modeltype">
                 <option value=""></option>
-                <option value="1">剪切层</option>
-                <option value="2">悬臂梁</option>
+                <option value="1">FDD</option>
+                <option value="2">SSI</option>
               </select> 
             </div>
           </div>
           <div class="col-12 strike text-muted" id="parametercontrol">
             <span> 参 数 </span>
           </div>
-          <div id="storey-control" class="control-form">
+          <div id="FDD-control" class="control-form d-none">
             <div class="form-group row">
-              <label for="storey-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
+              <label for="FDD-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
               <div class="col-sm-7 overflow-hidden">
                 <span>
-                  <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="storey-selectbtn">
+                  <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="FDD-selectbtn">
                     Select
                   </button>
                 </span>
@@ -100,12 +100,12 @@
               </button>  
             </div>           
           </div>
-          <div id="beam-control" class="control-form">
+          <div id="SSI-control" class="control-form d-none">
             <div class="form-group row">
-              <label for="beam-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
+              <label for="SSI-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
               <div class="col-sm-7">
                 <span>
-                  <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="beam-selectbtn">
+                  <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="SSI-selectbtn">
                     Select
                   </button>
                 </span>
@@ -155,10 +155,7 @@
             </select>   
           </div> -->
         </div>
-        <!-- --------------------------------下--------------------------------------------- -->
         <div id="result-container" class="col-md-4 order-last">
-
-
           <div id="drawbard"
             style="height: auto; width: 100% ;margin: 0;padding: 0; margin:0px;">
             <div class="col-12 strike text-muted" id="modelcontrol">
@@ -171,9 +168,10 @@
           <div id="tail" style="display: none;">
             <div id="statusdiv"></div>
             <input id="stateDiv" value="0">
+            <button id="stateButton"></button>
           </div>
         </div>  
-        <!-- ----------------------------上------------------------------------------------ -->
+  
       </div>
     </div>
 
@@ -183,6 +181,33 @@
 <script src="./js/goBarChartH.js"></script>
 <script>
   
+  // 参数控制选择隐藏与显示。
+  $(document).ready(
+    $("#modeltype").change(
+      function() {
+        console.log(this.value)
+        switch (this.value) {
+          case '1':
+            console.log(typeof this.value)
+            var c = document.querySelectorAll('.control-form');
+            var i;
+            for (var i=0; i<c.length; i++) {
+              c[i].className = 'control-form d-none';
+            }
+            $('#FDD-control').attr('class', 'control-form d-block');
+            break;
+          case '2':
+            var c = document.querySelectorAll('.control-form');
+            var i;
+            for (var i=0; i<c.length; i++) {
+              c[i].className = 'control-form d-none';
+            }
+            $('#SSI-control').attr('class', 'control-form d-block');
+            break;
+        }
+      })
+    )
+  // 
   $(document).ready(
     $(".calculate").click(
       async function () {
@@ -240,12 +265,13 @@
             //             orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax)();
             var mode = await eel.SSI(csvfile, ssiFs, ssiOrder, ssiNs)();
             // 控制台输出结果，检查是否正确。
-            console.log(mode)
-            console.log(typeof mode)
+            console.log(mode);
+            console.log(typeof mode);
             var state = await eel.creatStoreyModeShapeJSCAD(mode, ssiOrder, 21)();
-            console.log(typeof state)
+            console.log(typeof state);
             if (state == 1){
-              $('#stateDiv').attr('value',1);
+              console.log('hello');
+              $('#stateButton').click();
             }
             break;
         } // SWITCH

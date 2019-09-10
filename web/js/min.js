@@ -46974,7 +46974,7 @@ Processor.prototype = {
     this.formatDropdown.style.display = !this.hasOutputFile && this.viewedObject ? 'inline' : 'none';
     this.generateOutputFileButton.style.display = !this.hasOutputFile && this.viewedObject ? 'inline' : 'none';
     this.downloadOutputFileLink.style.display = this.hasOutputFile ? 'inline' : 'none';
-    this.parametersdiv.style.display = this.paramControls.length > 0 ? 'inline-block' : 'none'; // was 'block'
+    this.parametersdiv.style.display = this.paramControls.length > 0 ? 'block' : 'none'; // was 'block'
     this.errordiv.style.display = this.hasError ? 'block' : 'none';
     this.statusdiv.style.display = this.hasError ? 'none' : 'block';
     this.selectdiv.style.display = this.currentObjects.length > 1 ? 'none' : 'none'; // FIXME once there's a data model
@@ -47519,8 +47519,8 @@ function init() {
   //     xhr.send();
   //   }
   // });
-  document.getElementById('stateDiv').addEventListener('change', function (event) {
-    console.log('stateDiv');
+  document.getElementById('stateButton').addEventListener('click', function (event) {
+    console.log('stateButton');
     var design = './models/storeyModeShape.jscad';
     // console.log(design);
     // load the given design
