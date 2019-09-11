@@ -21,6 +21,8 @@
   /* min-width: calc(5 / 12 * 100vw);*/
   height: calc(99vh - 60px); 
   padding-left: 0px; 
+  padding-right: 0px;  
+  background-color: #ededed;
 }
 
 #header {
@@ -86,43 +88,10 @@ height: 200px;
 .box {
   height: 2rem;
   margin-bottom: 1rem;
-  background-color: #345;
+  background-color: #035e7b;
 }
 .box p {
   padding-top: 2px;
+  color: #eff6e0;
 }
 
-.strike {
-    display: block;
-    text-align: center;
-    overflow: hidden;
-    white-space: nowrap;
-    margin-top: 16px; 
-    margin-bottom: 16px;
-    font-size: 18px;
-}
-
-.strike > span {
-    position: relative;
-    display: inline-block;
-}
-
-.strike > span:before,
-.strike > span:after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 9999px;
-    height: 1px;
-    background: grey;
-}
-
-.strike > span:before {
-    right: 100%;
-    margin-right: 15px;
-}
-
-.strike > span:after {
-    left: 100%;
-    margin-left: 15px;
-}
