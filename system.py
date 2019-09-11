@@ -10,7 +10,7 @@ from tkinter import filedialog
 from tkinter import *
 from mpld3 import plugins
 from sklearn.utils.extmath import randomized_svd
-
+import random
 
 @eel.expose
 def getPath():
@@ -35,17 +35,41 @@ def Identifier(PSD,Frequencies,ax):
 	ax.plot(Frequencies,s3)
 	ax.set_xlim([0,30])
 
+@eel.expose
+def creatStoreyModeShapeJSCAD(mode,order,dof):
+	plate = ''
+	plate += "function getParameterDefinitions(){return [{ name: 'numMode', caption: '模态阶数:', type: 'int', initial: 1, min: 1, max: "
+	plate += str(order) 
+	plate += ", step: 1 }];}function main(params) {var storey = involuteStorey(params.numMode);return storey;}function involuteStorey(numMode) {var storeyMode = ["
+	for o in range(order):
+		plate += "["
+		for d in range(dof):
+			plate += "{'dof':" + str(d+1) + ",'value':" + str(mode[o*dof+d]) + "},"
+		plate += "],"
+	plate += "];var numStorey = "
+	plate += str(dof)
+	plate += ";var pillarHeight = 10;var storeyWidth = 10;var pillarPitch = 0.5;numMode = numMode - 1;var group = [];for (var k = 0; k < numStorey; k++) {if(k < 1){var pillarLeft = CSG.cylinder({start: [0, -storeyWidth/2, k*1.1*pillarHeight], end: [0, -storeyWidth/2 + storeyWidth*0.4*storeyMode[numMode][k].value*1.05, k*1.1 *pillarHeight + pillarHeight*1.05], radius: pillarPitch, resolution: 200});var pillarRight = CSG.cylinder({start: [0, storeyWidth/2, k*1.1*pillarHeight], end: [0, storeyWidth/2 + storeyWidth*0.4*storeyMode[numMode][k].value*1.05, k*1.1 *pillarHeight + pillarHeight*1.05], radius: pillarPitch, resolution: 200});}else{pillarLeft = CSG.cylinder({start: [0, -storeyWidth/2 + storeyWidth*0.4*storeyMode[numMode][k - 1].value - (storeyWidth*0.4*storeyMode[numMode][k].value - storeyWidth*0.4*storeyMode[numMode][k - 1].value)*0.05, k*1.1*pillarHeight - pillarHeight*0.05], end: [0, -storeyWidth/2 + storeyWidth*0.4*storeyMode[numMode][k].value + (storeyWidth*0.4*storeyMode[numMode][k].value - storeyWidth*0.4*storeyMode[numMode][k - 1].value)*0.05, k*1.1 *pillarHeight + pillarHeight*1.05], radius: pillarPitch, resolution: 200});pillarRight = CSG.cylinder({start: [0, storeyWidth/2 + storeyWidth*0.4*storeyMode[numMode][k - 1].value - (storeyWidth*0.4*storeyMode[numMode][k].value - storeyWidth*0.4*storeyMode[numMode][k - 1].value)*0.05, k*1.1*pillarHeight - pillarHeight*0.05], end: [0, storeyWidth/2 + storeyWidth*0.4*storeyMode[numMode][k].value + (storeyWidth*0.4*storeyMode[numMode][k].value - storeyWidth*0.4*storeyMode[numMode][k - 1].value)*0.05, k*1.1 *pillarHeight + pillarHeight*1.05], radius: pillarPitch, resolution: 200});}var storey = cube({size: [pillarPitch*2.5, storeyWidth*1.2, pillarHeight*0.1],center: [true,true,false]}).translate([0,storeyWidth*0.4*storeyMode[numMode][k].value,pillarHeight+(pillarHeight*1.1)*k]);group.push(pillarLeft,pillarRight,storey)}return group}"
+
+	try:
+		with open("./web/models/storeyModeShape.jscad",'w',encoding="utf-8") as f:
+			f.write(plate)
+		return 1
+	except Exception as e:
+		return 2
+
 
 @eel.expose
-def FDD(csvfile,fs,nperseg,window):
+def FDD(csvfile,fs,order,nperseg,window):
 	print('Here python!')
 	# print(type(csvfile))
 	fs = int(fs)
 	nperseg = int(nperseg)
-	print(csvfile,fs,nperseg,window)
-	print(type(csvfile),type(fs),type(nperseg),type(window))
+	# print(csvfile,fs,nperseg,window)
+	# print(type(csvfile),type(fs),type(nperseg),type(window))
 	data = pd.read_csv(csvfile,header=None)
 
+	if window == '汉宁窗':
+		window = 'hann'
 	test, _= signal.csd(data[0],data[0],fs=fs,window=window,nperseg=nperseg,detrend=False)
 
 	(row,col) = data.shape
@@ -60,44 +84,31 @@ def FDD(csvfile,fs,nperseg,window):
 			F[i][j], PSD[i][j]= signal.csd(data[i],data[j],fs=fs,window=window,nperseg=nperseg,detrend=False)
 
 	Frequencies = F[1,1,:]
-	fig, ax = plt.subplots(1, 1)
-	fig.suptitle('figure') 
-	plt.xlabel('Frequency (Hz)')
-	plt.ylabel('1st Singular values of the PSD matrix (db)')
-	s1 = []
-	s2 = []
-	s3 = []
+	s1 = np.zeros(PSD.shape[2])
 	for i in range(PSD.shape[2]):
 		u, s, _ = np.linalg.svd(PSD[:,:,i])
-		s1.append(s[0])
-		s2.append(s[1])
-		s3.append(s[2])
+		s1[i] = s[0]
 		ms[:,i] = u[:,0]
-	ax.plot(Frequencies,s1)
-	ax.plot(Frequencies,s2)
-	ax.plot(Frequencies,s3)
-	peaks, _ = signal.find_peaks(s1)
-	s1 = np.array(s1)
-	ax.plot(Frequencies[peaks],s1[peaks],"o")
-	plugins.connect(fig, plugins.MousePosition(fontsize=14))
-	ax.grid(True, alpha=0.3)
-	ax.set_xlim([0,30])
+	s1=20*np.log10(s1)
 
-	# encoded = fig_to_base64(fig)
-	# figure = '<img src="data:image/png;base64, {}">'.format(encoded.decode('utf-8'))
-	# return figure
-	head = '<!DOCTYPE html><html><head><title></title></head><body>'
-	tail = '</body></html>'
-	html = head + mpld3.fig_to_html(fig) + tail
-	with open('./web/fddfigure.html','w') as f:
-		f.write(html)
-	return True
+	peaks, _= signal.find_peaks(s1, height=10)
+	omega = Frequencies[peaks][0:order]
+	Phi = ms[:,peaks][:,0:order]
+	Phi_amp = np.abs(Phi).T
+	Phi_list = Phi_amp.reshape(col*order).tolist()
+
+	results = []
+	results.append(Phi_list)
+	results.append(omega.tolist())
+	results.append(col)
+	return results
 
 @eel.expose
 def SSI(csvfile,fs,order,s):
 	print("Here python, SSI!")
 	fs = int(fs)
-	order = int(order)
+	orders = order
+	order = 2*int(order)
 	s = int(s)
 	Y = pd.read_csv(csvfile, header=None)
 	Y = Y.values
@@ -138,9 +149,17 @@ def SSI(csvfile,fs,order,s):
 	    omega[i]=np.abs(fs*np.log(lamda[i]))/2/np.pi
 
 	omega=list(sorted(set(omega)))
-	Phi=np.dot(C,phi)
-	Phi = Phi.tolist()
-	return omega
+	Phi = np.dot(C,phi)
+	Phi_amp = np.abs(Phi).T
+	Phi_amps = np.zeros((orders,ns))
+	for i in range(orders):
+		Phi_amps[i, :] = Phi_amp[2*i, :]
+	Phi_list = Phi_amps.reshape(ns*orders).tolist()
+	results = []
+	results.append(Phi_list)
+	results.append(omega)
+	results.append(ns)
+	return results
 
 def on_close(page, sockets):
 	print(page, 'closed')
@@ -275,6 +294,8 @@ def BeamDetect(goaltype,csvfile,numelem,MeasuredNodes,orderuse,DirDOF,TolLen,E,r
 
 	return results
 
+
+
 if __name__ == '__main__':
 	my_options = {
     'mode': "chrome-app", #or "chrome-app",
@@ -282,7 +303,7 @@ if __name__ == '__main__':
     'port': 8080,
     }
 	eel.init('web')
-	eel.start('index.html', size=(1920,1080), options=my_options, callback=on_close)
+	eel.start('modalAnalysis.html?v={:.8f}'.format(random.random()), size=(1920,1080), options=my_options, callback=on_close)
 
 
 	
