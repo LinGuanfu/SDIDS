@@ -4,8 +4,8 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
   <title>SDIDS</title>
   <link rel="stylesheet" type="text/css" href="./css/min.css">
-  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" >
-  <script type='text/javascript' src='/eel.js'></script>
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+  <!-- <script type='text/javascript' src='/eel.js'></script> -->
   <script src="./js/min.js"></script>
 </head>
 <body>
@@ -17,240 +17,395 @@
 
     <div id="content" class="container-fluid">
       <div class="row">
-        <div id="jscad-container" class="col-md-5 jscad-container">
+        <div class="col-md-quarter sidebar order-1">
+          <div class="btn-group-vertical"> 
+            <button id="identifyButton" type="button" class="btn btn-sm btn-block mt-md-2 mb-md-2">
+              <img src="./images/outline_center_focus_strong_white_18dp.png">
+            </button> 
+            <button id="modeAnalysisButton" type="button" class="btn btn-sm btn-block mb-md-2">
+              <img src="./images/outline_timeline_white_18dp.png">
+            </button> 
+            <button id="elseButton" type="button" class="btn btn-sm btn-block mb-md-2">
+              <img src="./images/outline_perm_data_setting_white_18dp.png">
+            </button> 
+          </div>
+        </div>
+        <div id="jscad-container" class="col-md-5 order-3 jscad-container">
           <div oncontextmenu="return false;" id="viewerContext" design-url="storey-options.jscad"></div> 
         </div>
-        <div id="control-container" class="col-md-2 order-first scrollbar-ripe-malinka sidebar ">
-          <div class="col-12 box shadow" id="modelcontrol">
-            <p class="text-center text-light"> 模 型 </p>
+        <div id="control-container" class="col-md-7quarter order-2 scrollbar-ripe-malinka control-bar ">
+          <div id="identifyControl" class="method-control ">
+            <div class="col-12 box shadow" id="modelcontrol">
+              <p class="text-center text-light"> 模 型 </p>
+            </div>
+            <div class="form-group row ">
+              <label for="modeltype" class="col-sm-5 col-form-label text-left">计算模型</label>
+              <div class="col-sm-7">
+                <select class="form-control" id="modeltype">
+                  <option value=""></option>
+                  <option value="1">剪切层</option>
+                  <option value="2">悬臂梁</option>
+                </select> 
+              </div>
+            </div>
+            <div class="col-12 box shadow" id="parametercontrol">
+              <p class="text-center text-light"> 参 数 </p>
+            </div>
+            <div id="storey-control" class="control-form d-none">
+              <div class="form-group row">
+                <label for="storey-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
+                <div class="col-sm-7 overflow-hidden">
+                  <span>
+                    <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="storey-selectbtn">
+                      Select
+                    </button>
+                  </span>
+                  <span class="submitWord ">未选择数据。</span>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="storeyEffDof" class="col-sm-5 col-form-label text-left">测点编号</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="storeyEffDof", value="[8]">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="storeyOrderUse" class="col-sm-5 col-form-label text-left">数据阶数</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="storeyOrderUse", value="[1,2,3,4,5,6,7]">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="storeyTol" class="col-sm-5 col-form-label text-left">收敛因子</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="storeyTol", value="1.0e-6">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="storeyNmax" class="col-sm-5 col-form-label text-left">最大迭代步数</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="storeyNmax", value="1000">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="storeyGoalType" class="col-sm-5 col-form-label text-left">目标函数类型</label>
+                <div class="col-sm-7">
+                  <select class="form-control" id="storeyGoalType">
+                    <option>解耦型</option>
+                    <option>耦合型</option>
+                  </select> 
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="storeyRegForm" class="col-sm-4 col-form-label text-left">正则化</label>
+                <div class="col-sm-8">
+                  <div id="storeyRegForm">
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" id="storeyL1Reg" name="regularization" class="custom-control-input regularization" value="L1" checked>
+                      <label class="custom-control-label" for="storeyL1Reg">L-1 (默认)</label>
+                    </div>
+                        <div class="row reg-group" id="storeyL1RegGroup" >
+                      <div class="col-md-6 form-group">
+                        <strong class="text-muted mb-1">
+                          <label for="storeyL1Alpha">&#945;</label>
+                        </strong>
+                        <input type="number" class="form-control" name="L1-alpha" id="storeyL1Alpha" value="10"> 
+                      </div>
+                      <div class="col-md-6 form-group">
+                        <strong class="text-muted mb-1">
+                          <label for="storeyL1Lmax">L-max</label>
+                        </strong>
+                        <input type="number" class="form-control" name="L1-lmax" id="storeyL1Lmax" value="3">    
+                      </div>            
+                    </div>
+
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio"  id="storeyL2Reg"  name="regularization" class="custom-control-input regularization" value="L2">
+                      <label class="custom-control-label"  for="storeyL2Reg">L-2 </label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" id="storeyNoReg" name="regularization" class="custom-control-input regularization" value="">
+                      <label class="custom-control-label" for="storeyNoReg">不采用正则化 </label>
+                    </div>                
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 p-2">
+                <button class="btn btn-primary btn-block calculate">
+                  计算损伤
+                </button>  
+              </div>           
+            </div>
+            <div id="beam-control" class="control-form d-none">
+              <div class="form-group row">
+                <label for="beam-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
+                <div class="col-sm-7">
+                  <span>
+                    <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="beam-selectbtn">
+                      Select
+                    </button>
+                  </span>
+                  <span class="submitWord">未选择数据。</span>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="beamEffDof" class="col-sm-5 col-form-label text-left">测点编号</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="beamEffDof", value="[20]">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="beamOrderUse" class="col-sm-5 col-form-label text-left">数据阶数</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="beamOrderUse", value="[1,2,3,4,5,6]">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="beamDirDof" class="col-sm-5 col-form-label text-left">约束编号</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="beamDirDof", value="[1,2]">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="beamTolLen" class="col-sm-5 col-form-label text-left">梁总长度</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="beamTolLen", value="0.4953">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="beamSectionWidth" class="col-sm-5 col-form-label text-left">梁横截面宽度</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="beamSectionWidth", value="0.0254">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="beamSectionHeight" class="col-sm-5 col-form-label text-left">梁横截面高度</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="beamSectionHeight", value="0.00635">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="beamTol" class="col-sm-5 col-form-label text-left">收敛因子</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="beamTol", value="1.0e-6">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="beamNmax" class="col-sm-5 col-form-label text-left">最大迭代步数</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="beamNmax", value="1000">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="beamGoalType" class="col-sm-5 col-form-label text-left">目标函数类型</label>
+                <div class="col-sm-7">
+                  <select class="form-control" id="beamGoalType">
+                    <option>解耦型</option>
+                    <option>耦合型</option>
+                  </select> 
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="beamRegForm" class="col-sm-4 col-form-label text-left">正则化</label>
+                <div class="col-sm-8">
+                  <div id="beamRegForm">
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" id="beamL1Reg" name="regularization" class="custom-control-input regularization" value="L1" checked>
+                      <label class="custom-control-label" for="beamL1Reg">L-1 (默认)</label>
+                    </div>
+                        <div class="row reg-group" id="beamL1RegGroup" >
+                      <div class="col-md-6 form-group">
+                        <strong class="text-muted mb-1">
+                          <label for="beamL1Alpha">&#945;</label>
+                        </strong>
+                        <input type="number" class="form-control" name="L1-alpha" id="beamL1Alpha" value="100"> 
+                      </div>
+                      <div class="col-md-6 form-group">
+                        <strong class="text-muted mb-1">
+                          <label for="beamL1Lmax">L-max</label>
+                        </strong>
+                        <input type="number" class="form-control" name="L1-lmax" id="beamL1Lmax" value="4">    
+                      </div>            
+                    </div>
+
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio"  id="beamL2Reg"  name="regularization" class="custom-control-input regularization" value="L2">
+                      <label class="custom-control-label"  for="beamL2Reg">L-2 </label>
+                    </div>
+                    <div class="custom-control custom-radio mb-1">
+                      <input type="radio" id="beamNoReg" name="regularization" class="custom-control-input regularization" value="">
+                      <label class="custom-control-label" for="beamNoReg">不采用正则化 </label>
+                    </div>                
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 p-2">
+                <button class="btn btn-primary btn-block calculate">
+                  计算损伤
+                </button>
+              </div>
+<!--               <div class="col-md-6 form-group">
+                <strong class="text-muted mb-1">
+                  <label for="modeltype">模型类型</label>           
+                </strong>
+                <select class="form-control" id="modeltype">
+                  <option>剪切层</option>
+                  <option>悬臂梁</option>
+                </select>   
+              </div> 
+              <div class="col-md-6 form-group">
+                <strong class="text-muted mb-1">
+                  <label for="goaltype">目标函数类型</label>
+                </strong>
+                <select class="form-control" id="goaltype">
+                  <option>解耦型</option>
+                  <option>耦合型</option>
+                </select>   
+              </div>   -->    
+            </div>
           </div>
-          <div class="form-group row ">
-            <label for="modeltype" class="col-sm-5 col-form-label text-left">计算模型</label>
-            <div class="col-sm-7">
+          <div id="modeAnalysisControl" class="method-control d-none">
+            <div class="col-12 box shadow" id="modeAnalysis">
+              <p class="text-center text-light"> 模 态 分 析 </p>
+            </div>
+            <div class="form-group row">
+              <label for="modeAnalysisMethod" class="col-sm-5 col-form-label text-left">分析方法</label>
+              <div class="col-sm-7">
+                <select class="form-control" id="modeAnalysisMethod">
+                  <option value=""></option>
+                  <option value="1">FDD</option>
+                  <option value="2">SSI</option>
+                </select> 
+              </div>
+            </div>
+             <div class="col-12 box shadow" id="modeAnalysisParameter">
+              <p class="text-center text-light"> 参 数 </p>
+            </div>
+            <div id="FDD-control" class="control-form d-none">
+              <div class="form-group row">
+                <label for="FDD-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
+                <div class="col-sm-7 overflow-hidden">
+                  <span>
+                    <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="FDD-selectbtn">
+                      Select
+                    </button>
+                  </span>
+                  <span class="submitWord ">未选择数据。</span>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="fddFs" class="col-sm-5 col-form-label text-left">采样频率</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="fddFs", value="500">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="fddOrder" class="col-sm-5 col-form-label text-left">计算模态阶数</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="fddOrder", value="4">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="fddNfft" class="col-sm-5 col-form-label text-left">傅里叶变换长度</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="fddNfft", value="1024">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="fddNperseg" class="col-sm-5 col-form-label text-left">窗口长度</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="fddNperseg", value="1024">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="fddNoverlap" class="col-sm-5 col-form-label text-left">重叠长度</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="fddNoverlap", value="512">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="fddWindow" class="col-sm-5 col-form-label text-left">窗口类型</label>
+                <div class="col-sm-7">
+                  <select class="form-control" id="fddWindow">
+                    <option>汉宁窗</option>
+                    <option>汉明型</option>
+                    <option>Boxcar</option>
+                    <option>巴特利特窗</option>
+                    <option>三角窗</option>
+                  </select> 
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="fddAverage" class="col-sm-5 col-form-label text-left">平均方式</label>
+                <div class="col-sm-7">
+                  <select class="form-control" id="fddAverage">
+                    <option>Mean</option>
+                    <option>Median</option>
+                  </select> 
+                </div>
+              </div>
+              <div class="col-sm-12 p-2">
+                <button class="btn btn-primary btn-block calculate">
+                  计算模态
+                </button>  
+              </div>           
+            </div>
+            <div id="SSI-control" class="control-form d-none">
+              <div class="form-group row">
+                <label for="SSI-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
+                <div class="col-sm-7">
+                  <span>
+                    <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="SSI-selectbtn">
+                      Select
+                    </button>
+                  </span>
+                  <span class="submitWord">未选择数据。</span>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="ssiFs" class="col-sm-5 col-form-label text-left">采样频率</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="ssiFs", value="500">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="ssiOrder" class="col-sm-5 col-form-label text-left">计算模态阶数</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="ssiOrder", value="4">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="ssiNs" class="col-sm-5 col-form-label text-left">Hankel矩阵维度</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="ssiNs", value="100">
+                </div>
+              </div>
+              <div class="col-sm-12 p-2">
+                <button class="btn btn-primary btn-block calculate">
+                  计算模态
+                </button>
+              </div>          
+            </div>
+  <!--           <div class="col-md-6 form-group">
+              <strong class="text-muted mb-1">
+                <label for="modeltype">模型类型</label>           
+              </strong>
               <select class="form-control" id="modeltype">
-                <option value=""></option>
-                <option value="1">剪切层</option>
-                <option value="2">悬臂梁</option>
-              </select> 
-            </div>
+                <option>剪切层</option>
+                <option>悬臂梁</option>
+              </select>   
+            </div> 
+            <div class="col-md-6 form-group">
+              <strong class="text-muted mb-1">
+                <label for="goaltype">目标函数类型</label>
+              </strong>
+              <select class="form-control" id="goaltype">
+                <option>解耦型</option>
+                <option>耦合型</option>
+              </select>   
+            </div> -->
           </div>
-          <div class="col-12 box shadow" id="parametercontrol">
-            <p class="text-center text-light"> 参 数 </p>
-          </div>
-          <div id="storey-control" class="control-form d-none">
-            <div class="form-group row">
-              <label for="storey-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
-              <div class="col-sm-7 overflow-hidden">
-                <span>
-                  <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="storey-selectbtn">
-                    Select
-                  </button>
-                </span>
-                <span class="submitWord ">未选择数据。</span>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="storeyEffDof" class="col-sm-5 col-form-label text-left">测点编号</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="storeyEffDof", value="[8]">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="storeyOrderUse" class="col-sm-5 col-form-label text-left">数据阶数</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="storeyOrderUse", value="[1,2,3,4,5,6,7]">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="storeyTol" class="col-sm-5 col-form-label text-left">收敛因子</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="storeyTol", value="1.0e-6">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="storeyNmax" class="col-sm-5 col-form-label text-left">最大迭代步数</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="storeyNmax", value="1000">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="storeyGoalType" class="col-sm-5 col-form-label text-left">目标函数类型</label>
-              <div class="col-sm-7">
-                <select class="form-control" id="storeyGoalType">
-                  <option>解耦型</option>
-                  <option>耦合型</option>
-                </select> 
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="storeyRegForm" class="col-sm-4 col-form-label text-left">正则化</label>
-              <div class="col-sm-8">
-                <div id="storeyRegForm">
-                  <div class="custom-control custom-radio mb-1">
-                    <input type="radio" id="storeyL1Reg" name="regularization" class="custom-control-input regularization" value="L1" checked>
-                    <label class="custom-control-label" for="storeyL1Reg">L-1 (默认)</label>
-                  </div>
-                      <div class="row reg-group" id="storeyL1RegGroup" >
-                    <div class="col-md-6 form-group">
-                      <strong class="text-muted mb-1">
-                        <label for="storeyL1Alpha">&#945;</label>
-                      </strong>
-                      <input type="number" class="form-control" name="L1-alpha" id="storeyL1Alpha" value="10"> 
-                    </div>
-                    <div class="col-md-6 form-group">
-                      <strong class="text-muted mb-1">
-                        <label for="storeyL1Lmax">L-max</label>
-                      </strong>
-                      <input type="number" class="form-control" name="L1-lmax" id="storeyL1Lmax" value="3">    
-                    </div>            
-                  </div>
-
-                  <div class="custom-control custom-radio mb-1">
-                    <input type="radio"  id="storeyL2Reg"  name="regularization" class="custom-control-input regularization" value="L2">
-                    <label class="custom-control-label"  for="storeyL2Reg">L-2 </label>
-                  </div>
-                  <div class="custom-control custom-radio mb-1">
-                    <input type="radio" id="storeyNoReg" name="regularization" class="custom-control-input regularization" value="">
-                    <label class="custom-control-label" for="storeyNoReg">不采用正则化 </label>
-                  </div>                
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-12 p-2">
-              <button class="btn btn-primary btn-block calculate">
-                计算损伤
-              </button>  
-            </div>           
-          </div>
-          <div id="beam-control" class="control-form d-none">
-            <div class="form-group row">
-              <label for="beam-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
-              <div class="col-sm-7">
-                <span>
-                  <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="beam-selectbtn">
-                    Select
-                  </button>
-                </span>
-                <span class="submitWord">未选择数据。</span>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="beamEffDof" class="col-sm-5 col-form-label text-left">测点编号</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="beamEffDof", value="[20]">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="beamOrderUse" class="col-sm-5 col-form-label text-left">数据阶数</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="beamOrderUse", value="[1,2,3,4,5,6]">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="beamDirDof" class="col-sm-5 col-form-label text-left">约束编号</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="beamDirDof", value="[1,2]">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="beamTolLen" class="col-sm-5 col-form-label text-left">梁总长度</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="beamTolLen", value="0.4953">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="beamSectionWidth" class="col-sm-5 col-form-label text-left">梁横截面宽度</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="beamSectionWidth", value="0.0254">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="beamSectionHeight" class="col-sm-5 col-form-label text-left">梁横截面高度</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="beamSectionHeight", value="0.00635">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="beamTol" class="col-sm-5 col-form-label text-left">收敛因子</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="beamTol", value="1.0e-6">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="beamNmax" class="col-sm-5 col-form-label text-left">最大迭代步数</label>
-              <div class="col-sm-7">
-                <input type="text" class="form-control" id="beamNmax", value="1000">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="beamGoalType" class="col-sm-5 col-form-label text-left">目标函数类型</label>
-              <div class="col-sm-7">
-                <select class="form-control" id="beamGoalType">
-                  <option>解耦型</option>
-                  <option>耦合型</option>
-                </select> 
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="beamRegForm" class="col-sm-4 col-form-label text-left">正则化</label>
-              <div class="col-sm-8">
-                <div id="beamRegForm">
-                  <div class="custom-control custom-radio mb-1">
-                    <input type="radio" id="beamL1Reg" name="regularization" class="custom-control-input regularization" value="L1" checked>
-                    <label class="custom-control-label" for="beamL1Reg">L-1 (默认)</label>
-                  </div>
-                      <div class="row reg-group" id="beamL1RegGroup" >
-                    <div class="col-md-6 form-group">
-                      <strong class="text-muted mb-1">
-                        <label for="beamL1Alpha">&#945;</label>
-                      </strong>
-                      <input type="number" class="form-control" name="L1-alpha" id="beamL1Alpha" value="100"> 
-                    </div>
-                    <div class="col-md-6 form-group">
-                      <strong class="text-muted mb-1">
-                        <label for="beamL1Lmax">L-max</label>
-                      </strong>
-                      <input type="number" class="form-control" name="L1-lmax" id="beamL1Lmax" value="4">    
-                    </div>            
-                  </div>
-
-                  <div class="custom-control custom-radio mb-1">
-                    <input type="radio"  id="beamL2Reg"  name="regularization" class="custom-control-input regularization" value="L2">
-                    <label class="custom-control-label"  for="beamL2Reg">L-2 </label>
-                  </div>
-                  <div class="custom-control custom-radio mb-1">
-                    <input type="radio" id="beamNoReg" name="regularization" class="custom-control-input regularization" value="">
-                    <label class="custom-control-label" for="beamNoReg">不采用正则化 </label>
-                  </div>                
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-12 p-2">
-              <button class="btn btn-primary btn-block calculate">
-                计算损伤
-              </button>
-            </div>          
-          </div>
-<!--           <div class="col-md-6 form-group">
-            <strong class="text-muted mb-1">
-              <label for="modeltype">模型类型</label>           
-            </strong>
-            <select class="form-control" id="modeltype">
-              <option>剪切层</option>
-              <option>悬臂梁</option>
-            </select>   
-          </div> 
-          <div class="col-md-6 form-group">
-            <strong class="text-muted mb-1">
-              <label for="goaltype">目标函数类型</label>
-            </strong>
-            <select class="form-control" id="goaltype">
-              <option>解耦型</option>
-              <option>耦合型</option>
-            </select>   
-          </div> -->
         </div>
-        <!-- --------------------------------下--------------------------------------------- -->
         <div id="result-container" class="col-md-5 order-last border-left">
           <div class="col-12 box shadow" id="resultcontrol">
             <p class="text-center text-light"> 结 果 图 表 </p>
@@ -264,7 +419,6 @@
             <div id="statusdiv"></div>
           </div>
         </div>  
-        <!-- ----------------------------上------------------------------------------------ -->
       </div>
     </div>
 
@@ -289,8 +443,57 @@
     }
   });
 
+  // 控制 模态识别 的参数选择隐藏与显示。
+  $(document).ready(
+    $("#modeAnalysisMethod").change(
+      function() {
+        console.log(this.value)
+        switch (this.value) {
+          case '1':
+            console.log(typeof this.value)
+            var c = document.querySelectorAll('.control-form');
+            var i;
+            for (var i=0; i<c.length; i++) {
+              c[i].className = 'control-form d-none';
+            }
+            $('#FDD-control').attr('class', 'control-form d-block');
+            break;
+          case '2':
+            var c = document.querySelectorAll('.control-form');
+            var i;
+            for (var i=0; i<c.length; i++) {
+              c[i].className = 'control-form d-none';
+            }
+            $('#SSI-control').attr('class', 'control-form d-block');
+            break;
+        }
+      })
+    )
+  // 控制 分析方法 的方法选择隐藏或显示。
+  $(document).ready(
+    $("#modeAnalysisButton").click(
+      function() {
+        var c = document.querySelectorAll('.method-control');
+        var i;
+        for (var i=0; i<c.length; i++) {
+          c[i].className = 'method-control d-none';
+        }
+        $('#modeAnalysisControl').attr('class', 'method-control d-block');
+      })
+    )
+  $(document).ready(
+    $("#identifyButton").click(
+      function() {
+        var c = document.querySelectorAll('.method-control');
+        var i;
+        for (var i=0; i<c.length; i++) {
+          c[i].className = 'method-control d-none';
+        }
+        $('#identifyControl').attr('class', 'method-control d-block');
+      })
+    )
 
-
+  // 计算执行
   $(document).ready(
     $(".calculate").click(
       async function () {
@@ -401,6 +604,8 @@
             }
             break;
         } // SWITCH
+
+
 
 // <!-- --------------------------------下--------------------------------------------- -->
    var numelem = 8;
