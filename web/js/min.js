@@ -47483,26 +47483,9 @@ function init() {
     switch (this.value) {
       case '1':
         var design = './models/storey-options.jscad';
-        var c = document.querySelectorAll('.control-form');
-        var i;
-        for (var i=0; i<c.length; i++) {
-          c[i].className = 'control-form d-none';
-        }
-        document.getElementById('storey-control').className = 'control-form d-block';
-        document.getElementById('calcState').setAttribute('value', '1');
         break;
       case '2':
         var design = './models/beam-options.jscad';
-        var c = document.querySelectorAll('.control-form');
-        var i;
-        for (var i=0; i<c.length; i++) {
-          c[i].className = 'control-form d-none';
-        }
-        document.getElementById('beam-control').className = 'control-form d-block';
-        document.getElementById('calcState').setAttribute('value', '2');
-
-        console.log(document.getElementById('calcState').value);
-
         break;
     }
     // console.log(design);
