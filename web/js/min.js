@@ -46830,7 +46830,11 @@ Processor.prototype = {
     this.parameterstable.className = 'parameterstable';
     this.parametersdiv.appendChild(this.parameterstable);
 
-    element = this.parametersdiv.querySelector('button#updateButton');
+    this.parameterbuttondiv = document.createElement('div');
+    this.parameterbuttondiv.className = 'parameterbuttondiv col-sm-12 p-2';
+    this.parametersdiv.appendChild(this.parameterbuttondiv);
+
+    element = this.parametersdiv.querySelector('.parameterbuttondiv').querySelector('button#updateButton');
     if (element === null) {
       element = document.createElement('button');
       element.innerHTML = '更新模型';
@@ -46840,14 +46844,14 @@ Processor.prototype = {
     element.onclick = function (e) {
       that.rebuildSolids();
     };
-    this.parametersdiv.appendChild(element);
+    this.parametersdiv.querySelector('.parameterbuttondiv').appendChild(element);
 
     // implementing instantUpdate
     var instantUpdateCheckbox = document.createElement('input');
     instantUpdateCheckbox.type = 'checkbox';
     instantUpdateCheckbox.id = 'instantUpdate';
     instantUpdateCheckbox.checked = 'checked';
-    this.parametersdiv.appendChild(instantUpdateCheckbox);
+    this.parametersdiv.querySelector('.parameterbuttondiv').appendChild(instantUpdateCheckbox);
 
     element = document.getElementById('instantUpdateLabel');
     if (element === null) {
@@ -46856,7 +46860,7 @@ Processor.prototype = {
       element.id = 'instantUpdateLabel';
     }
     element.setAttribute('for', instantUpdateCheckbox.id);
-    this.parametersdiv.appendChild(element);
+    this.parametersdiv.querySelector('.parameterbuttondiv').appendChild(element);
 
     this.enableItems();
     this.clearViewer();
