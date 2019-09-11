@@ -5,8 +5,11 @@
   <title>SDIDS</title>
   <link rel="stylesheet" type="text/css" href="./css/min.css">
   <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+  <script src="./js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src='./js/bootstrap.bundle.js'></script>
   <!-- <script type='text/javascript' src='/eel.js'></script> -->
   <script src="./js/min.js"></script>
+  <script src="./js/goBarChartH.js"></script>
 </head>
 <body>
   <div class="main-content">
@@ -19,13 +22,13 @@
       <div class="row">
         <div class="col-md-quarter sidebar order-1">
           <div class="btn-group-vertical"> 
-            <button id="identifyButton" type="button" class="btn btn-sm btn-block mt-md-2 mb-md-2">
+            <button id="identifyButton" type="button" class="btn btn-sm btn-block mt-md-2 mb-md-2" data-toggle="tooltip" data-placement="right" title="损伤识别">
               <img src="./images/outline_center_focus_strong_white_18dp.png">
             </button> 
-            <button id="modeAnalysisButton" type="button" class="btn btn-sm btn-block mb-md-2">
+            <button id="modeAnalysisButton" type="button" class="btn btn-sm btn-block mb-md-2" data-toggle="tooltip" data-placement="right" title="模态分析">
               <img src="./images/outline_timeline_white_18dp.png">
             </button> 
-            <button id="elseButton" type="button" class="btn btn-sm btn-block mb-md-2">
+            <button id="elseButton" type="button" class="btn btn-sm btn-block mb-md-2" data-toggle="tooltip" data-placement="right" title="其他">
               <img src="./images/outline_perm_data_setting_white_18dp.png">
             </button> 
           </div>
@@ -427,9 +430,12 @@
 
   </div>
 
-<script src="./js/jquery-3.4.1.min.js"></script>
-<script src="./js/goBarChartH.js"></script>
+
 <script>
+  $(document).ready(
+    function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  })
   // 检查类型是radio(type="radio"),属于regularization类(class="regularization")的input标签
   // 有没有被选中(checked)，没有被选中的话让它父元素的下一个属于reg-group类(class="reg-group")的
   // div 标签隐藏。
@@ -680,6 +686,7 @@
       }
     })
   );
+
 </script>
 
 </body>
