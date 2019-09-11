@@ -56,6 +56,12 @@
               </div>
             </div>
             <div class="form-group row">
+              <label for="fddOrder" class="col-sm-5 col-form-label text-left">计算模态阶数</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="fddOrder", value="4">
+              </div>
+            </div>
+            <div class="form-group row">
               <label for="fddNfft" class="col-sm-5 col-form-label text-left">傅里叶变换长度</label>
               <div class="col-sm-7">
                 <input type="text" class="form-control" id="fddNfft", value="1024">
@@ -121,7 +127,7 @@
             <div class="form-group row">
               <label for="ssiOrder" class="col-sm-5 col-form-label text-left">计算模态阶数</label>
               <div class="col-sm-7">
-                <input type="text" class="form-control" id="ssiOrder", value="8">
+                <input type="text" class="form-control" id="ssiOrder", value="4">
               </div>
             </div>
             <div class="form-group row">
@@ -216,37 +222,43 @@
           case 1:
             var csvfile = localStorage.getItem("csvfile");      // 文件路径。
             var fddFs = Number($("#fddFs").val());              // 采样频率。
+            var fddOrder = Number($("#fddOrder").val());        // 计算模态阶数。
             var fddNfft = Number($("#fddNfft").val());          // 傅里叶变换长度。
             var fddNperseg = Number($("#fddNperseg").val());    // 窗口长度。
             var fddNoverlap = Number($("#fddNoverlap").val());  // 重叠长度。
-            var fddWindow = $("#fddWindow").val();              // 目标函数类型。
+            var fddWindow = $("#fddWindow").val();              // 窗口类型。
             var fddAverage = $("#fddAverage").val();            // 平均方式。
             //  // 控制台输出参数，以便查看数据类型和数据是否正确。
-            console.log('fddFs:',typeof fddFs);
-            console.log(fddFs);
-            console.log('fddNfft:',typeof fddNfft);
-            console.log(fddNfft);
-            console.log('fddNperseg:',typeof fddNperseg);
-            console.log(fddNperseg);
-            console.log('fddNoverlap:',typeof fddNoverlap);
-            console.log(fddNoverlap);
-            console.log('fddWindow:',typeof fddWindow);
-            console.log(fddWindow);
-            console.log('fddAverage:',typeof fddAverage);
-            console.log(fddAverage);
+            // console.log('fddFs:',typeof fddFs);
+            // console.log(fddFs);
+            // console.log('fddOrder:',typeof fddOrder);
+            // console.log(fddOrder);
+            // console.log('fddNfft:',typeof fddNfft);
+            // console.log(fddNfft);
+            // console.log('fddNperseg:',typeof fddNperseg);
+            // console.log(fddNperseg);
+            // console.log('fddNoverlap:',typeof fddNoverlap);
+            // console.log(fddNoverlap);
+            // console.log('fddWindow:',typeof fddWindow);
+            // console.log(fddWindow);
+            // console.log('fddAverage:',typeof fddAverage);
+            // console.log(fddAverage);
 
-            // // 调用后台python的FDD函数进行模态分析并保存返回的结果于mode。
-              // var stiff = await eel.StoreyDetect(goaltype,localStorage.
-              //   getItem("csvfile"),dof,effdof,orderuse,lmax,alpha,tol,nmax)();
-            var mode = await eel.FDD(csvfile, fddFs, fddNfft, fddWindow)();
-            // // 控制台输出结果，检查是否正确。
-            // console.log(mode)
-            // console.log(typeof mode)
-            var state = await eel.creatStoreyModeShapeJSCAD(mode, order, dof);
-            if (state == 1){
-              $('#stateDiv').attr('value','1');
-            }
-             break;
+            // // 调用后台python的FDD函数进行模态分析。
+            var fddResults = await eel.FDD(csvfile, fddFs, fddOrder, fddNfft, fddWindow)();
+            var fddMode = fddResults[0]
+            var fddOmega = fddResults[1]
+            var fddDof = fddResults[2]
+            // 控制台输出结果，检查是否正确。
+            // console.log(fddMode);
+            // console.log(typeof fddMode);
+            // console.log(fddOmega);
+            // console.log(typeof fddOmega);
+            // console.log(fddDof);
+            // console.log(typeof fddDof);
+
+            var state = await eel.creatStoreyModeShapeJSCAD(fddMode, fddOrder, fddDof)();
+            break;
           case 2:
             // 获取所有需要用到的参数。
             var csvfile = localStorage.getItem("csvfile");        // 文件路径。
@@ -254,28 +266,31 @@
             var ssiOrder = Number($("#ssiOrder").val());          // 计算模态阶数。
             var ssiNs = Number($("#ssiNs").val());                // Hankel矩阵维度。
               // 控制台输出参数，以便查看数据类型和数据是否正确。
-            console.log('ssiFs:',typeof ssiFs);
-            console.log(ssiFs);
-            console.log('ssiOrder:',typeof ssiOrder);
-            console.log(ssiOrder);
-            console.log('ssiNs:',typeof ssiNs);
-            console.log(ssiNs);
+            // console.log('ssiFs:',typeof ssiFs);
+            // console.log(ssiFs);
+            // console.log('ssiOrder:',typeof ssiOrder);
+            // console.log(ssiOrder);
+            // console.log('ssiNs:',typeof ssiNs);
+            // console.log(ssiNs);
             // 调用后台python的SSI函数进行模态分析并保存返回的结果于mode。
-            // var stiff = await eel.BeamDetect(goaltype,csvfile,numelem,MeasuredNodes,
-            //             orderuse,DirDOF,TolLen,E,rho,area,Im,lmax,alpha,tol,nmax)();
-            var mode = await eel.SSI(csvfile, ssiFs, ssiOrder, ssiNs)();
+            var ssiResults = await eel.SSI(csvfile, ssiFs, ssiOrder, ssiNs)();
+            var ssiMode = ssiResults[0]
+            var ssiOmega = ssiResults[1]
+            var ssiDof = ssiResults[2]
             // 控制台输出结果，检查是否正确。
-            console.log(mode);
-            console.log(typeof mode);
-            var state = await eel.creatStoreyModeShapeJSCAD(mode, ssiOrder, 21)();
-            console.log(typeof state);
-            if (state == 1){
-              console.log('hello');
-              $('#stateButton').click();
-            }
+            // console.log(ssiMode);
+            // console.log(typeof ssiMode);
+            // console.log(ssiOmega);
+            // console.log(typeof ssiOmega);
+            // console.log(ssiDof);
+            // console.log(typeof ssiDof);
+
+            var state = await eel.creatStoreyModeShapeJSCAD(ssiMode, ssiOrder, ssiDof)();
             break;
         } // SWITCH
-
+        if (state == 1){
+          $('#stateButton').click();
+        }
 // <!-- --------------------------------下--------------------------------------------- -->
   // var numelem = 8;
   // var stiff = [{ 'dof': 1, 'value': 1.00 }, { 'dof': 2, 'value': 1.00 }, { 'dof': 3, 'value': 0.9 }, { 'dof': 4, 'value': 1.00 },

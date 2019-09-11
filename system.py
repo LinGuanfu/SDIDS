@@ -59,15 +59,17 @@ def creatStoreyModeShapeJSCAD(mode,order,dof):
 
 
 @eel.expose
-def FDD(csvfile,fs,nperseg,window):
+def FDD(csvfile,fs,order,nperseg,window):
 	print('Here python!')
 	# print(type(csvfile))
 	fs = int(fs)
 	nperseg = int(nperseg)
-	print(csvfile,fs,nperseg,window)
-	print(type(csvfile),type(fs),type(nperseg),type(window))
+	# print(csvfile,fs,nperseg,window)
+	# print(type(csvfile),type(fs),type(nperseg),type(window))
 	data = pd.read_csv(csvfile,header=None)
 
+	if window == '汉宁窗':
+		window = 'hann'
 	test, _= signal.csd(data[0],data[0],fs=fs,window=window,nperseg=nperseg,detrend=False)
 
 	(row,col) = data.shape
@@ -82,44 +84,31 @@ def FDD(csvfile,fs,nperseg,window):
 			F[i][j], PSD[i][j]= signal.csd(data[i],data[j],fs=fs,window=window,nperseg=nperseg,detrend=False)
 
 	Frequencies = F[1,1,:]
-	fig, ax = plt.subplots(1, 1)
-	fig.suptitle('figure') 
-	plt.xlabel('Frequency (Hz)')
-	plt.ylabel('1st Singular values of the PSD matrix (db)')
-	s1 = []
-	s2 = []
-	s3 = []
+	s1 = np.zeros(PSD.shape[2])
 	for i in range(PSD.shape[2]):
 		u, s, _ = np.linalg.svd(PSD[:,:,i])
-		s1.append(s[0])
-		s2.append(s[1])
-		s3.append(s[2])
+		s1[i] = s[0]
 		ms[:,i] = u[:,0]
-	ax.plot(Frequencies,s1)
-	ax.plot(Frequencies,s2)
-	ax.plot(Frequencies,s3)
-	peaks, _ = signal.find_peaks(s1)
-	s1 = np.array(s1)
-	ax.plot(Frequencies[peaks],s1[peaks],"o")
-	plugins.connect(fig, plugins.MousePosition(fontsize=14))
-	ax.grid(True, alpha=0.3)
-	ax.set_xlim([0,30])
+	s1=20*np.log10(s1)
 
-	# encoded = fig_to_base64(fig)
-	# figure = '<img src="data:image/png;base64, {}">'.format(encoded.decode('utf-8'))
-	# return figure
-	head = '<!DOCTYPE html><html><head><title></title></head><body>'
-	tail = '</body></html>'
-	html = head + mpld3.fig_to_html(fig) + tail
-	with open('./web/fddfigure.html','w') as f:
-		f.write(html)
-	return True
+	peaks, _= signal.find_peaks(s1, height=10)
+	omega = Frequencies[peaks][0:order]
+	Phi = ms[:,peaks][:,0:order]
+	Phi_amp = np.abs(Phi).T
+	Phi_list = Phi_amp.reshape(col*order).tolist()
+
+	results = []
+	results.append(Phi_list)
+	results.append(omega.tolist())
+	results.append(col)
+	return results
 
 @eel.expose
 def SSI(csvfile,fs,order,s):
 	print("Here python, SSI!")
 	fs = int(fs)
-	order = int(order)
+	orders = order
+	order = 2*int(order)
 	s = int(s)
 	Y = pd.read_csv(csvfile, header=None)
 	Y = Y.values
@@ -162,8 +151,15 @@ def SSI(csvfile,fs,order,s):
 	omega=list(sorted(set(omega)))
 	Phi = np.dot(C,phi)
 	Phi_amp = np.abs(Phi).T
-	Phi_list = np.abs(Phi).T.reshape(ns*order).tolist()
-	return Phi_list
+	Phi_amps = np.zeros((orders,ns))
+	for i in range(orders):
+		Phi_amps[i, :] = Phi_amp[2*i, :]
+	Phi_list = Phi_amps.reshape(ns*orders).tolist()
+	results = []
+	results.append(Phi_list)
+	results.append(omega)
+	results.append(ns)
+	return results
 
 def on_close(page, sockets):
 	print(page, 'closed')
