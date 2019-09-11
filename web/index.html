@@ -417,6 +417,9 @@
             
           <div id="tail" style="display: none;">
             <div id="statusdiv"></div>
+            <button id="stateButton"></button>
+            <input type="number" name="calcState" id="calcState" value="0">
+
           </div>
         </div>  
       </div>
@@ -457,6 +460,7 @@
               c[i].className = 'control-form d-none';
             }
             $('#FDD-control').attr('class', 'control-form d-block');
+            $('#calcState').attr('value',3);
             break;
           case '2':
             var c = document.querySelectorAll('.control-form');
@@ -465,6 +469,7 @@
               c[i].className = 'control-form d-none';
             }
             $('#SSI-control').attr('class', 'control-form d-block');
+            $('#calcState').attr('value',4);
             break;
         }
       })
@@ -498,7 +503,7 @@
     $(".calculate").click(
       async function () {
         // console.log(typeof($("#modeltype").val()),$("#modeltype").val());
-        switch (Number($("#modeltype").val())){
+        switch (Number($("#calcState").val())){
           case 1:
             var csvfile = localStorage.getItem("csvfile");    // 文件路径。
             var dof = Number($("#numStorey").val());          // 自由度。
