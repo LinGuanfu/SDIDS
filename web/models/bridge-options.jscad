@@ -39,10 +39,10 @@ function involuteBridge(numBay, pillarHeight, bridgeWidth, clearance, spanLength
                    center: [true,true,false]}).translate([-spanLength*(numBay-1)/2+spanLength*k,0,pillarHeight]),
     	cube({size: [0.15*bridgeWidth, bridgeWidth*0.05, pillarHeight*0.15],
                    center: [true,true,false]}).translate([-spanLength*(numBay-1)/2+spanLength*k,-0.525*bridgeWidth,pillarHeight]),
-		cube({size: [0.15*bridgeWidth, bridgeWidth*0.05, pillarHeight*0.15],
+  		cube({size: [0.15*bridgeWidth, bridgeWidth*0.05, pillarHeight*0.15],
                    center: [true,true,false]}).translate([-spanLength*(numBay-1)/2+spanLength*k, 0.525*bridgeWidth,pillarHeight])
     	);
-    if (k==numBay-1) {
+    if (k == numBay-1) {
       group.push(pillarLeft,pillarRight,pier);
     } else　{
       var bridge = cube({size: [spanLength*0.999, bridgeWidth, pillarHeight*0.1],
