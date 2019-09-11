@@ -6,18 +6,21 @@
 #jscad-container {
   /* min-width: calc(5 / 12 * 100vw);*/
   height: calc(99vh - 60px);
- padding-left: 0px; 
- padding-right: 0px; 
+  padding-left: 0px; 
+  padding-right: 0px; 
 }
 
 #control-container {
   /* min-width: calc(2 / 12 * 100vw); */
   height: calc(99vh - 60px); 
+  padding-left: 0px; 
+  padding-right: 0px; 
 }
 
 #result-container {
   /* min-width: calc(5 / 12 * 100vw);*/
   height: calc(99vh - 60px); 
+  padding-left: 0px; 
 }
 
 #header {
@@ -31,7 +34,7 @@
 }
 
 
- canvas { 
+canvas { 
   margin: 0px; /* not inherited */
   border: 0px none gray; /* not inherited */
   padding: 0px; /* not inherited */
@@ -51,6 +54,10 @@
   margin:  0px; /* not inherited */
   border:  0px none gray; /* not inherited */
   padding: 0px; /* not inherited */
+}
+
+.form-group {
+  margin: 0 0 1rem 0 !important;
 }
 
 .scrollbar-ripe-malinka::-webkit-scrollbar-track {
@@ -74,6 +81,15 @@ background-image: #6c757d;
 position: relative;
 overflow-y: scroll;
 height: 200px; 
+}
+
+.box {
+  height: 2rem;
+  margin-bottom: 1rem;
+  background-color: #345;
+}
+.box p {
+  padding-top: 2px;
 }
 
 .strike {

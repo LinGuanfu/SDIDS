@@ -21,8 +21,11 @@
           <div oncontextmenu="return false;" id="viewerContext" design-url="storey-options.jscad"></div> 
         </div>
         <div id="control-container" class="col-md-2 order-first scrollbar-ripe-malinka sidebar">
-          <div class="col-12 strike text-muted" id="modelcontrol">
+<!--           <div class="col-12 strike text-muted" id="modelcontrol">
             <span> 模 型 </span>
+          </div> -->
+          <div class="col-12 box" id="modelcontrol">
+            <p class="text-center text-light"> 模 型 </p>
           </div>
           <div class="form-group row">
             <label for="modeltype" class="col-sm-5 col-form-label text-left">计算模型</label>
@@ -34,8 +37,11 @@
               </select> 
             </div>
           </div>
-          <div class="col-12 strike text-muted" id="parametercontrol">
+<!--           <div class="col-12 strike text-muted" id="parametercontrol">
             <span> 参 数 </span>
+          </div> -->
+          <div class="col-12 box" id="parametercontrol">
+            <p class="text-center text-light"> 参 数 </p>
           </div>
           <div id="storey-control" class="control-form d-none">
             <div class="form-group row">
@@ -398,9 +404,9 @@
         } // SWITCH
 
 // <!-- --------------------------------下--------------------------------------------- -->
-   //var numelem = 8;
-  //var stiff = [{ 'dof': 1, 'value': 1.00 }, { 'dof': 2, 'value': 1.00 }, { 'dof': 3, 'value': 0.9 }, { 'dof': 4, 'value': 1.00 },
-   //{ 'dof': 5, 'value': 0.95 },{ 'dof': 6, 'value': 0.95 },{ 'dof': 7, 'value': 0.85 },{ 'dof': 8, 'value': 0.9}];
+   var numelem = 8;
+  var stiff = [{ 'dof': 1, 'value': 1.00 }, { 'dof': 2, 'value': 1.00 }, { 'dof': 3, 'value': 0.9 }, { 'dof': 4, 'value': 1.00 },
+   { 'dof': 5, 'value': 0.95 },{ 'dof': 6, 'value': 0.95 },{ 'dof': 7, 'value': 0.85 },{ 'dof': 8, 'value': 0.9}];
    
   numelem=stiff.length
   var sx = Array.from({ length: numelem }, (item, index) => index + 1);
