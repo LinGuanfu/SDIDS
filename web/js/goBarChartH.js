@@ -24,25 +24,26 @@ function goBarChartH(dataArr){
     initChart(); // 图表初始化
     drawLineLabelMarkers(); // 绘制图表轴、标签和标记
     drawBarAnimate(); // 绘制柱状图的动画
+
     //检测鼠标移动
-    var mouseTimer = null;
-    canvas.addEventListener("mousemove",function(e){
-        e = e || window.event;
-        if( e.offsetX || e.offsetX==0 ){
-            mousePosition.x = e.offsetX;
-            mousePosition.y = e.offsetY;
-        }else if( e.layerX || e.layerX==0 ){
-            mousePosition.x = e.layerX;
-            mousePosition.y = e.layerY;
-        }
+    // var mouseTimer = null;
+    // canvas.addEventListener("mousemove",function(e){
+    //     e = e || window.event;
+    //     if( e.offsetX || e.offsetX==0 ){
+    //         mousePosition.x = e.offsetX;
+    //         mousePosition.y = e.offsetY;
+    //     }else if( e.layerX || e.layerX==0 ){
+    //         mousePosition.x = e.layerX;
+    //         mousePosition.y = e.layerY;
+    //     }
         
-        clearTimeout(mouseTimer);
-        mouseTimer = setTimeout(function(){
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            drawLineLabelMarkers();
-            drawBarAnimate(true);
-        },10);
-    });
+    //     clearTimeout(mouseTimer);
+    //     mouseTimer = setTimeout(function(){
+    //         ctx.clearRect(0,0,canvas.width, canvas.height);
+    //         drawLineLabelMarkers();
+    //         drawBarAnimate(true);
+    //     },10);
+    // });
 
     //点击刷新图表
     canvas.onclick = function(){
@@ -55,7 +56,7 @@ function goBarChartH(dataArr){
     // 图表初始化
     function initChart(){
         // 图表信息
-        cMargin = 60;
+        cMargin = 0;
         cSpace = 80;
         /*这里是对高清屏幕的处理，
              方法：先将canvas的width 和height设置成本来的两倍
@@ -69,8 +70,8 @@ function goBarChartH(dataArr){
        var width = dwidth.split("px")[0] * 9 / 10;
        var height = dheight.split("px")[0];
         canvas.width = width * 2 ;
-        canvas.height = 480* 2;
-
+       // canvas.height = 480* 2;
+       canvas.height = canvas.width*0.618;
         canvas.style.height = canvas.height/2 + "px";
         canvas.style.width = canvas.width/2 + "px";
         cHeight = canvas.height - cMargin - cSpace;
@@ -93,7 +94,7 @@ function goBarChartH(dataArr){
         totalYNomber = 1;
         // 运动相关
         ctr = 1;
-        numctr = 100;
+        numctr = 10;
         speed = 10;
 
         //柱状图渐变色
@@ -154,10 +155,10 @@ function goBarChartH(dataArr){
             ctx.fillText(markerVal, xMarker, yMarker, cSpace); // 文字
         }
         // 绘制标题 y
-        ctx.save();
-        ctx.rotate(-Math.PI/2);
-        ctx.fillText("损伤结果", -canvas.height/2, cSpace-10);
-        ctx.restore();
+        // ctx.save();
+        // ctx.rotate(-Math.PI/2);
+        // ctx.fillText("损伤结果", -canvas.height/2-bWidth/5, cSpace-bWidth/5);
+        // ctx.restore();
         // 绘制标题 x
         ctx.fillText("单元", originX+cWidth/2, originY+cSpace/2+30);
     };
@@ -171,7 +172,7 @@ function goBarChartH(dataArr){
             var y = originY - barH;
             var x = originX + (bWidth+bMargin)*i + bMargin;
             drawRect( x, y, bWidth, barH-1, mouseMove );  //高度减一避免盖住x轴
-            ctx.fillText((barVal*ctr/numctr), x+30, y-8); // 文字
+            ctx.fillText((barVal*ctr/numctr), x+10, y-8); // 文字
         }
         if(ctr<numctr){
             ctr++;
