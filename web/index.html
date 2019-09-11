@@ -450,7 +450,6 @@
   $(document).ready(
     $("#modeltype").change(
       function() {
-        console.log(this.value);
         switch (this.value) {
           case '1':
             var c = document.querySelectorAll('.control-form');
@@ -480,7 +479,6 @@
         console.log(this.value)
         switch (this.value) {
           case '1':
-            console.log(typeof this.value)
             var c = document.querySelectorAll('.control-form');
             var i;
             for (var i=0; i<c.length; i++) {
@@ -663,7 +661,6 @@
           goBarChartH(AALL)
         };
         resizeCanvas();
-
       } // click 下的function
     )
   );
@@ -683,9 +680,7 @@
       }
     })
   );
-
 </script>
-
 
 </body>
 </html>
