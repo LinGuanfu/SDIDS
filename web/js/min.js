@@ -46818,11 +46818,72 @@ Processor.prototype = {
     this.downloadOutputFileLink.className = 'downloadOutputFileLink'; // so we can css it
     this.statusbuttons.appendChild(this.downloadOutputFileLink);
 
-    this.parametersdiv = this.containerdiv.parentElement.nextElementSibling.querySelector('div#identifyControl').querySelector('div#parametersdiv');
+
+    // this.parametersdiv = this.containerdiv.parentElement.nextElementSibling.querySelector('div#identifyControl').querySelector('div#parametersdiv');
+    this.parametersdiv = null;
     if (!this.parametersdiv) {
       this.parametersdiv = document.createElement('div');
       this.parametersdiv.id = 'parametersdiv';
-      this.containerdiv.parentElement.nextElementSibling.querySelector('div#identifyControl').insertBefore(this.parametersdiv,this.containerdiv.parentElement.nextElementSibling.querySelector('div#identifyControl').querySelector('div#parametercontrol'));
+      // this.containerdiv.parentElement.nextElementSibling.querySelector('div#identifyControl').insertBefore(this.parametersdiv,this.containerdiv.parentElement.nextElementSibling.querySelector('div#identifyControl').querySelector('div#parametercontrol'));
+      document.getElementById('result-container').appendChild(this.parametersdiv);
+    }
+    // SDIDSchange input table to div
+    // this.parameterstable = document.createElement('table');
+    // this.parameterstable = document.createElement('div');
+    // this.parameterstable.className = 'parameterstable';
+    // this.parametersdiv.appendChild(this.parameterstable);
+
+    // this.parameterbuttondiv = document.createElement('div');
+    // this.parameterbuttondiv.className = 'parameterbuttondiv col-sm-12 p-2';
+    // this.parametersdiv.appendChild(this.parameterbuttondiv);
+
+    // element = this.parametersdiv.querySelector('.parameterbuttondiv').querySelector('button#updateButton');
+    // if (element === null) {
+    //   element = document.createElement('button');
+    //   element.innerHTML = '更新模型';
+    //   element.id = 'updateButton';
+    //   element.classList.add('btn', 'btn-primary', 'btn-block');
+    // }
+    // element.onclick = function (e) {
+    //   that.rebuildSolids();
+    // };
+    // this.parametersdiv.querySelector('.parameterbuttondiv').appendChild(element);
+
+    // // implementing instantUpdate
+    // var instantUpdateCheckbox = document.createElement('input');
+    // instantUpdateCheckbox.type = 'checkbox';
+    // instantUpdateCheckbox.id = 'instantUpdate';
+    // instantUpdateCheckbox.checked = 'checked';
+    // this.parametersdiv.querySelector('.parameterbuttondiv').appendChild(instantUpdateCheckbox);
+
+    // element = document.getElementById('instantUpdateLabel');
+    // if (element === null) {
+    //   element = document.createElement('label');
+    //   element.innerHTML = '实时预览';
+    //   element.id = 'instantUpdateLabel';
+    // }
+    // element.setAttribute('for', instantUpdateCheckbox.id);
+    // this.parametersdiv.querySelector('.parameterbuttondiv').appendChild(element);
+
+    this.enableItems();
+    this.clearViewer();
+  },
+
+  createParamControlElement: function createParamControlElement(underWhoseControl) {
+    try {
+      this.parametersdiv = null;
+      document.getElementById('parametersdiv').outerHTML = "";
+      console.log(document.getElementById('parametersdiv'),'I am here!');
+    } catch (e) {console.log(e)}
+
+    this.underWhoseControl = underWhoseControl;
+    console.log(this.underWhoseControl);
+    this.parametersdiv = document.getElementById('parametersdiv');
+    if (!this.parametersdiv) {
+      this.parametersdiv = document.createElement('div');
+      this.parametersdiv.id = 'parametersdiv';
+      this.underWhoseControl.insertBefore(this.parametersdiv, this.underWhoseControl.querySelector('div.para-anchor'));
+      // this.containerdiv.parentElement.nextElementSibling.querySelector('div#identifyControl').insertBefore(this.parametersdiv,this.containerdiv.parentElement.nextElementSibling.querySelector('div#identifyControl').querySelector('div#parametercontrol'));
     }
     // SDIDSchange input table to div
     // this.parameterstable = document.createElement('table');
@@ -46834,7 +46895,7 @@ Processor.prototype = {
     this.parameterbuttondiv.className = 'parameterbuttondiv col-sm-12 p-2';
     this.parametersdiv.appendChild(this.parameterbuttondiv);
 
-    element = this.parametersdiv.querySelector('.parameterbuttondiv').querySelector('button#updateButton');
+    var element = this.parametersdiv.querySelector('.parameterbuttondiv').querySelector('button#updateButton');
     if (element === null) {
       element = document.createElement('button');
       element.innerHTML = '更新模型';
@@ -47484,6 +47545,8 @@ function init() {
   // plot 3d model
   document.getElementById('modeltype').addEventListener('change', function (event) {
     // console.log(this.value);
+    // console.log(document.getElementById('identifyControl'));
+    gProcessor.createParamControlElement(document.getElementById('identifyControl'));
     switch (this.value) {
       case '1':
         var design = './models/storey-options.jscad';
@@ -47514,7 +47577,9 @@ function init() {
   });
   // plot modal 3d picture
   document.getElementById('stateButton').addEventListener('click', function (event) {
-    console.log('stateButton');
+    // console.log('stateButton');
+    gProcessor.createParamControlElement(document.getElementById('modeAnalysisControl'));
+    console.log('click');
     var design = './models/storeyModeShape.jscad';
     // console.log(design);
     // load the given design

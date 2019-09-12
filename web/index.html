@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
   <script src="./js/jquery-3.4.1.min.js"></script>
   <script type="text/javascript" src='./js/bootstrap.bundle.js'></script>
-  <!-- <script type='text/javascript' src='/eel.js'></script> -->
+  <script type='text/javascript' src='/eel.js'></script>
   <script src="./js/min.js"></script>
   <script src="./js/goBarChartH.js"></script>
 </head>
@@ -51,7 +51,7 @@
                 </select> 
               </div>
             </div>
-            <div class="col-12 box shadow" id="parametercontrol">
+            <div class="col-12 box shadow para-anchor" id="parametercontrol">
               <p class="text-center text-light"> 参 数 </p>
             </div>
             <div id="storey-control" class="control-form d-none">
@@ -281,7 +281,7 @@
                 </select> 
               </div>
             </div>
-             <div class="col-12 box shadow" id="modeAnalysisParameter">
+             <div class="col-12 box shadow para-anchor" id="modeAnalysisParameter">
               <p class="text-center text-light"> 参 数 </p>
             </div>
             <div id="FDD-control" class="control-form d-none">
@@ -574,7 +574,31 @@
               // if (stiff){
 
               // }
-
+              // var numelem = 8;
+              // var stiff = [{ 'dof': 1, 'value': 1.00 }, { 'dof': 2, 'value': 1.00 }, { 'dof': 3, 'value': 0.9 }, { 'dof': 4, 'value': 1.00 },
+              //  { 'dof': 5, 'value': 0.95 },{ 'dof': 6, 'value': 0.95 },{ 'dof': 7, 'value': 0.85 },{ 'dof': 8, 'value': 0.9}];
+               
+              numelem=stiff.length
+              var sx = Array.from({ length: numelem }, (item, index) => index + 1);
+              var stiffvalue = new Array(numelem)
+              for (i = 0; i < stiff.length; i++) {
+                stiffvalue[i] = 1- stiff[i].value;
+              }
+              var AALL = new Array(numelem)
+              for (i = 0; i < stiff.length; i++) {
+                AALL[i] = [sx[i], stiffvalue[i]]
+              }
+              // [[1,0.9]]
+              $(window).resize(resizeCanvas);
+              function resizeCanvas() {
+                $("#barChart").attr("width", $(window).get(0).innerWidth);
+                $("#barChart").attr("height", $(window).get(0).innerHeight);
+                canvas = document.getElementById("barChart");
+                ctx = canvas.getContext("2d");
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                goBarChartH(AALL)
+              };
+              resizeCanvas();
             } else { 
             //     //如果不进行正则化，有待完成...
             //  console.log(dof,goaltype,effdof,orderuse);
@@ -634,6 +658,30 @@
             // 控制台输出结果，检查是否正确。
             // console.log(stiff)
             // console.log(typeof stiff)
+            // var numelem = 8;
+            // var stiff = [{ 'dof': 1, 'value': 1.00 }, { 'dof': 2, 'value': 1.00 }, { 'dof': 3, 'value': 0.9 }, { 'dof': 4, 'value': 1.00 },
+            //  { 'dof': 5, 'value': 0.95 },{ 'dof': 6, 'value': 0.95 },{ 'dof': 7, 'value': 0.85 },{ 'dof': 8, 'value': 0.9}];         
+              numelem=stiff.length
+              var sx = Array.from({ length: numelem }, (item, index) => index + 1);
+              var stiffvalue = new Array(numelem)
+              for (i = 0; i < stiff.length; i++) {
+                stiffvalue[i] = 1- stiff[i].value;
+              }
+              var AALL = new Array(numelem)
+              for (i = 0; i < stiff.length; i++) {
+                AALL[i] = [sx[i], stiffvalue[i]]
+              }
+              // [[1,0.9]]
+              $(window).resize(resizeCanvas);
+              function resizeCanvas() {
+                $("#barChart").attr("width", $(window).get(0).innerWidth);
+                $("#barChart").attr("height", $(window).get(0).innerHeight);
+                canvas = document.getElementById("barChart");
+                ctx = canvas.getContext("2d");
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                goBarChartH(AALL)
+              };
+              resizeCanvas();
             } else { 
             // 如果不进行正则化，有待完成...
             //  console.log(dof,modeltype,goaltype,MeasuredNodes,orderuse);
@@ -713,31 +761,7 @@
         } // SWITCH
 
 
-        // var numelem = 8;
-        // var stiff = [{ 'dof': 1, 'value': 1.00 }, { 'dof': 2, 'value': 1.00 }, { 'dof': 3, 'value': 0.9 }, { 'dof': 4, 'value': 1.00 },
-        //  { 'dof': 5, 'value': 0.95 },{ 'dof': 6, 'value': 0.95 },{ 'dof': 7, 'value': 0.85 },{ 'dof': 8, 'value': 0.9}];
-         
-        numelem=stiff.length
-        var sx = Array.from({ length: numelem }, (item, index) => index + 1);
-        var stiffvalue = new Array(numelem)
-        for (i = 0; i < stiff.length; i++) {
-          stiffvalue[i] = 1- stiff[i].value;
-        }
-        var AALL = new Array(numelem)
-        for (i = 0; i < stiff.length; i++) {
-          AALL[i] = [sx[i], stiffvalue[i]]
-        }
-        // [[1,0.9]]
-        $(window).resize(resizeCanvas);
-        function resizeCanvas() {
-          $("#barChart").attr("width", $(window).get(0).innerWidth);
-          $("#barChart").attr("height", $(window).get(0).innerHeight);
-          canvas = document.getElementById("barChart");
-          ctx = canvas.getContext("2d");
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          goBarChartH(AALL)
-        };
-        resizeCanvas();
+
       } // click 下的function
     )
   );
