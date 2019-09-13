@@ -46872,6 +46872,7 @@ Processor.prototype = {
   createParamControlElement: function createParamControlElement(underWhoseControl) {
     try {
       this.parametersdiv = null;
+      this.paramControls = [];
       document.getElementById('parametersdiv').outerHTML = "";
       console.log(document.getElementById('parametersdiv'),'I am here!');
     } catch (e) {console.log(e)}
@@ -47039,6 +47040,7 @@ Processor.prototype = {
     this.formatDropdown.style.display = !this.hasOutputFile && this.viewedObject ? 'inline' : 'none';
     this.generateOutputFileButton.style.display = !this.hasOutputFile && this.viewedObject ? 'inline' : 'none';
     this.downloadOutputFileLink.style.display = this.hasOutputFile ? 'inline' : 'none';
+    console.log(this.paramControls);
     this.parametersdiv.style.display = this.paramControls.length > 0 ? 'block' : 'none'; // was 'block'
     this.errordiv.style.display = this.hasError ? 'block' : 'none';
     this.statusdiv.style.display = this.hasError ? 'none' : 'block';
@@ -47541,12 +47543,19 @@ function init() {
 
   var viewer = document.getElementById('viewerContext');
   gProcessor = new Processor(viewer);
+  gProcessor.createParamControlElement(document.getElementById('identifyControl'));
+
+  document.getElementById('identifyButton').addEventListener('click', function (event){
+    gProcessor.createParamControlElement(document.getElementById('identifyControl'));
+  });
+
+  document.getElementById('modeAnalysisButton').addEventListener('click', function (event){
+    gProcessor.createParamControlElement(document.getElementById('modeAnalysisControl'));
+  });
 
   // plot 3d model
   document.getElementById('modeltype').addEventListener('change', function (event) {
     // console.log(this.value);
-    // console.log(document.getElementById('identifyControl'));
-    gProcessor.createParamControlElement(document.getElementById('identifyControl'));
     switch (this.value) {
       case '1':
         var design = './models/storey-options.jscad';
@@ -47578,7 +47587,6 @@ function init() {
   // plot modal 3d picture
   document.getElementById('stateButton').addEventListener('click', function (event) {
     // console.log('stateButton');
-    gProcessor.createParamControlElement(document.getElementById('modeAnalysisControl'));
     console.log('click');
     var design = './models/storeyModeShape.jscad';
     // console.log(design);

@@ -8,7 +8,7 @@
   <script src="./js/jquery-3.4.1.min.js"></script>
   <script type="text/javascript" src='./js/bootstrap.bundle.js'></script>
   <script type='text/javascript' src='/eel.js'></script>
-  <script src="./js/min.js"></script>
+  <script src="./js/min.js?v=1"></script>
   <script src="./js/goBarChartH.js"></script>
 </head>
 <body>
@@ -45,7 +45,7 @@
               <label for="modeltype" class="col-sm-5 col-form-label text-left">计算模型</label>
               <div class="col-sm-7">
                 <select class="form-control" id="modeltype">
-                  <option value=""></option>
+                  <option value="0"></option>
                   <option value="1">剪切层</option>
                   <option value="2">悬臂梁</option>
                 </select> 
@@ -275,7 +275,7 @@
               <label for="modeAnalysisMethod" class="col-sm-5 col-form-label text-left">分析方法</label>
               <div class="col-sm-7">
                 <select class="form-control" id="modeAnalysisMethod">
-                  <option value=""></option>
+                  <option value="0"></option>
                   <option value="1">FDD</option>
                   <option value="2">SSI</option>
                 </select> 
@@ -456,6 +456,7 @@
   $(document).ready(
     $("#modeltype").change(
       function() {
+        enableItem();
         switch (this.value) {
           case '1':
             var c = document.querySelectorAll('.control-form');
@@ -482,7 +483,8 @@
   $(document).ready(
     $("#modeAnalysisMethod").change(
       function() {
-        console.log(this.value)
+        console.log(this.value);
+        enableItem();
         switch (this.value) {
           case '1':
             var c = document.querySelectorAll('.control-form');
@@ -509,6 +511,8 @@
   $(document).ready(
     $("#modeAnalysisButton").click(
       function() {
+        $('#modeAnalysisMethod').val("0");
+        enableItem()
         var c = document.querySelectorAll('.method-control');
         var i;
         for (var i=0; i<c.length; i++) {
@@ -520,6 +524,8 @@
   $(document).ready(
     $("#identifyButton").click(
       function() {
+        $('#modeltype').val("0");
+        enableItem();
         var c = document.querySelectorAll('.method-control');
         var i;
         for (var i=0; i<c.length; i++) {
@@ -765,7 +771,7 @@
       } // click 下的function
     )
   );
-
+  
   // 获取文件路径。
   $(document).ready(
     $(".select-btn").click(async function () {
@@ -773,14 +779,19 @@
       var extStart = filepath.lastIndexOf('.');
       ext = filepath.substring(extStart, filepath.length).toUpperCase();
       if (ext !== '.CSV') {
-        $('.submitWord').html("上传文件出错！");
+        $('.submitWord', $($(this).parent()).parent()).html("上传文件出错！");
       } else {
+        console.log($($(this).parent()).parent());
         localStorage.setItem("csvfile", filepath);
-        $('.submitWord').html(filepath);
+        $('.submitWord', $($(this).parent()).parent()).html(filepath);
         console.log(localStorage.getItem("csvfile"));
       }
     })
   );
+
+  function enableItem(){
+    $('.submitWord').html("");
+  }
 
 </script>
 
