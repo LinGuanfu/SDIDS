@@ -410,10 +410,12 @@
           </div>
         </div>
         <div id="result-container" class="col-md-5 order-last border-left">
-          <div class="col-12 box" id="modelcontrol" style="margin-bottom: 0">
-            <p class="text-center text-light"> 频率分析表
-            </p>
+          <div class="col-12 box result-title" id="identifyResultTitle" style="margin-bottom: 0">
+            <p class="text-center text-light"> 损伤识别结果 </p>
           </div> 
+          <div class="col-12 box result-title d-none" id="modeResultTitle" style="margin-bottom: 0">
+            <p class="text-center text-light"> 频率分析表 </p>
+          </div>
           <table class="table text-center text-light " id="seleData" style="margin-top: 0"></table>
           <div id="drawbard" style="height: auto; width: 100% ;margin: 0;padding: 0; margin:0px;">
             <canvas id="barChart" style="height: auto; width: 100% "> <!--   ;border:5px solid; border-color: crimson border:5px solid; border-color: rgb(73, 20, 220)-->
@@ -521,6 +523,13 @@
           c[i].className = 'method-control d-none';
         }
         $('#modeAnalysisControl').attr('class', 'method-control d-block');
+
+        var c = document.querySelectorAll('.result-title');
+        var i;
+        for (var i=0; i<c.length; i++) {
+          c[i].className = 'col-12 box result-title d-none';
+        }
+        $('#modeResultTitle').attr('class', 'col-12 box result-title d-block');
       })
     )
   $(document).ready(
@@ -534,6 +543,13 @@
           c[i].className = 'method-control d-none';
         }
         $('#identifyControl').attr('class', 'method-control d-block');
+
+        var c = document.querySelectorAll('.result-title');
+        var i;
+        for (var i=0; i<c.length; i++) {
+          c[i].className = 'col-12 box result-title d-none';
+        }
+        $('#identifyResultTitle').attr('class', 'col-12 box result-title d-block');
       })
     )
 
