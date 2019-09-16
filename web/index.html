@@ -410,9 +410,11 @@
           </div>
         </div>
         <div id="result-container" class="col-md-5 order-last border-left">
-          <div class="col-12 box shadow" id="resultcontrol">
-            <p class="text-center text-light"> 结 果 图 表 </p>
-          </div>
+          <div class="col-12 box" id="modelcontrol" style="margin-bottom: 0">
+            <p class="text-center text-light"> 频率分析表
+            </p>
+          </div> 
+          <table class="table text-center text-light " id="seleData" style="margin-top: 0"></table>
           <div id="drawbard" style="height: auto; width: 100% ;margin: 0;padding: 0; margin:0px;">
             <canvas id="barChart" style="height: auto; width: 100% "> <!--   ;border:5px solid; border-color: crimson border:5px solid; border-color: rgb(73, 20, 220)-->
               你的浏览器不支持HTML5 canvas </canvas> 
@@ -430,7 +432,7 @@
 
   </div>
 
-
+<!-- <script src="./js/Model.js"></script> -->
 <script>
   $(document).ready(
     function () {
@@ -720,7 +722,7 @@
             // // 调用后台python的FDD函数进行模态分析。
             var fddResults = await eel.FDD(csvfile, fddFs, fddOrder, fddNfft, fddWindow)();
             var fddMode = fddResults[0]
-            var fddOmega = fddResults[1]
+            var Omega = fddResults[1]
             var fddDof = fddResults[2]
             // 控制台输出结果，检查是否正确。
             // console.log(fddMode);
@@ -733,6 +735,7 @@
             if (state == 1){
               $('#stateButton').click();
             }
+            creatTable(Omega);
             break;
           case 4:
             // 获取所有需要用到的参数。
@@ -750,7 +753,7 @@
             // 调用后台python的SSI函数进行模态分析并保存返回的结果于mode。
             var ssiResults = await eel.SSI(csvfile, ssiFs, ssiOrder, ssiNs)();
             var ssiMode = ssiResults[0]
-            var ssiOmega = ssiResults[1]
+            var Omega = ssiResults[1]
             var ssiDof = ssiResults[2]
             // 控制台输出结果，检查是否正确。
             // console.log(ssiMode);
@@ -763,6 +766,7 @@
             if (state == 1){
               $('#stateButton').click();
             }
+            creatTable(Omega);
             break;
         } // SWITCH
 
@@ -793,6 +797,29 @@
     $('.submitWord').html("");
   }
 
+
+  function creatTable(Omega){        
+    var data = "";
+    data += " <thead class='tableColor'> " +
+      " <tr> " +
+      "<th>阶次</th>" +
+      "<th>固有频率(Hz)</th>" +
+      " </tr>" +
+      "</thead>";   // 创造表头 
+
+
+    data += " <tbody class='tableColor'> ";  //表格内容定义
+
+    for (var i = 1; i <= Omega.length; i++) {
+      data += "<tr >";
+      data += "<td>" + i + "</td>";
+      data += "<td>" + Omega[i-1] + "</td>";
+      data += "</tr>";
+    }   // 表格内容 
+
+    data += "</tbody>";  // 表格内容定义结束 
+    $("#seleData").html(data);
+  }
 </script>
 
 </body>
