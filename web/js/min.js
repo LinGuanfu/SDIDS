@@ -47555,7 +47555,6 @@ function init() {
   });
 
   document.getElementById('modeAnalysisMethod').addEventListener('change', function (event) {
-    gProcessor.createElements();
     gProcessor.createParamControlElement(document.getElementById('modeAnalysisControl'));
   })
 
