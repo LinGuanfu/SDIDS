@@ -47545,6 +47545,7 @@ function init() {
   gProcessor = new Processor(viewer);
   gProcessor.createParamControlElement(document.getElementById('identifyControl'));
 
+
   document.getElementById('identifyButton').addEventListener('click', function (event){
     gProcessor.createParamControlElement(document.getElementById('identifyControl'));
   });
@@ -47552,6 +47553,11 @@ function init() {
   document.getElementById('modeAnalysisButton').addEventListener('click', function (event){
     gProcessor.createParamControlElement(document.getElementById('modeAnalysisControl'));
   });
+
+  document.getElementById('modeAnalysisMethod').addEventListener('change', function (event) {
+    gProcessor.createElement();
+    gProcessor.createParamControlElement(document.getElementById('modeAnalysisControl'));
+  })
 
   // plot 3d model
   document.getElementById('modeltype').addEventListener('change', function (event) {
