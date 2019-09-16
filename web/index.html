@@ -142,7 +142,7 @@
             <div id="beam-control" class="control-form d-none">
               <div class="form-group row">
                 <label for="beam-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
-                <div class="col-sm-7">
+                <div class="col-sm-7 overflow-hidden">
                   <span>
                     <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="beam-selectbtn">
                       Select
@@ -356,7 +356,7 @@
             <div id="SSI-control" class="control-form d-none">
               <div class="form-group row">
                 <label for="SSI-selectbtn" class="col-sm-5 col-form-label text-left">选择数据</label>
-                <div class="col-sm-7">
+                <div class="col-sm-7 overflow-hidden">
                   <span>
                     <button type="submit" class="btn btn-primary select-btn" value="getdatafile" id="SSI-selectbtn">
                       Select
@@ -514,7 +514,7 @@
     $("#modeAnalysisButton").click(
       function() {
         $('#modeAnalysisMethod').val("0");
-        enableItem()
+        enableItem();
         var c = document.querySelectorAll('.method-control');
         var i;
         for (var i=0; i<c.length; i++) {
@@ -795,12 +795,17 @@
 
   function enableItem(){
     $('.submitWord').html("");
+    $("#seleData").html("");
+
+    var canvas = document.getElementById('barChart');
+    var ctx = canvas.getContext("2d");
+    ctx.clearRect(0,0,canvas.width, canvas.height);
   }
 
 
   function creatTable(Omega){        
     var data = "";
-    data += " <thead class='tableColor'> " +
+    data += " <thead class='tableColor' id='modeTable'> " +
       " <tr> " +
       "<th>阶次</th>" +
       "<th>固有频率(Hz)</th>" +
