@@ -102,9 +102,21 @@ height: 200px;
   background-color: #0b243d;
 }
 
-.tableColor{
+.tableColor {
   height: 0rem;
   margin-bottom: 0rem;
   /* background-color: #bcdde7; */
   color: black;
+}
+
+#drawbard {
+  height: auto; 
+  width: 100% ;
+  margin: 0px;
+  padding: 0px;
+}
+
+#barChart {
+  height: auto; 
+  width: 100%;
 }

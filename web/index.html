@@ -410,15 +410,15 @@
           </div>
         </div>
         <div id="result-container" class="col-md-5 order-last border-left">
-          <div class="col-12 box result-title" id="identifyResultTitle" style="margin-bottom: 0">
+          <div class="col-12 box result-title mb-0" id="identifyResultTitle">
             <p class="text-center text-light"> 损伤识别结果 </p>
           </div> 
-          <div class="col-12 box result-title d-none" id="modeResultTitle" style="margin-bottom: 0">
+          <div class="col-12 box result-title mb-0 d-none" id="modeResultTitle">
             <p class="text-center text-light"> 频率分析表 </p>
           </div>
-          <table class="table text-center text-light " id="seleData" style="margin-top: 0"></table>
-          <div id="drawbard" style="height: auto; width: 100% ;margin: 0;padding: 0; margin:0px;">
-            <canvas id="barChart" style="height: auto; width: 100% "> <!--   ;border:5px solid; border-color: crimson border:5px solid; border-color: rgb(73, 20, 220)-->
+          <table class="table text-center text-light mt-0" id="seleData"></table>
+          <div id="drawbard">
+            <canvas id="barChart"> <!--   ;border:5px solid; border-color: crimson border:5px solid; border-color: rgb(73, 20, 220)-->
               你的浏览器不支持HTML5 canvas </canvas> 
           </div>
             
@@ -527,9 +527,9 @@
         var c = document.querySelectorAll('.result-title');
         var i;
         for (var i=0; i<c.length; i++) {
-          c[i].className = 'col-12 box result-title d-none';
+          c[i].className = 'col-12 box result-title mb-0 d-none';
         }
-        $('#modeResultTitle').attr('class', 'col-12 box result-title d-block');
+        $('#modeResultTitle').attr('class', 'col-12 box result-title mb-0 d-block');
       })
     )
   $(document).ready(
@@ -547,9 +547,9 @@
         var c = document.querySelectorAll('.result-title');
         var i;
         for (var i=0; i<c.length; i++) {
-          c[i].className = 'col-12 box result-title d-none';
+          c[i].className = 'col-12 box result-title mb-0 d-none';
         }
-        $('#identifyResultTitle').attr('class', 'col-12 box result-title d-block');
+        $('#identifyResultTitle').attr('class', 'col-12 box result-title mb-0 d-block');
       })
     )
 
