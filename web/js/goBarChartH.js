@@ -46,11 +46,11 @@ function goBarChartH(dataArr){
   // });
 
   //点击刷新图表
-  canvas.onclick = function(){
-    initChart(); // 图表初始化
-    drawLineLabelMarkers(); // 绘制图表轴、标签和标记
-    drawBarAnimate(); // 绘制折线图的动画
-  };
+  // canvas.onclick = function(){
+  //   initChart(); // 图表初始化
+  //   drawLineLabelMarkers(); // 绘制图表轴、标签和标记
+  //   drawBarAnimate(); // 绘制折线图的动画
+  // };
 
 
   // 图表初始化
