@@ -303,7 +303,7 @@ if __name__ == '__main__':
     'port': 8080,
     }
 	eel.init('web')
-	eel.start('index.html?v={:.8f}'.format(random.random()), size=(1920,1080), options=my_options, callback=on_close)
+	eel.start('modalAnalysis.html?v={:.8f}'.format(random.random()), size=(1920,1080), options=my_options, callback=on_close)
 
 
 	
